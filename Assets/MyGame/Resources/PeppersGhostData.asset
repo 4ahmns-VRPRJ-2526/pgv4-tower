@@ -1,0 +1,53 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53a6d6e887f134249b180827a8a75fcb, type: 3}
+  m_Name: PeppersGhostData
+  m_EditorClassIdentifier: 
+  taskSprites:
+  - {fileID: 21300000, guid: 4b74ca424a3d4534d967e2ccc1db1658, type: 3}
+  - {fileID: 21300000, guid: 661952365355f724b93d02f25f610eb4, type: 3}
+  - {fileID: 21300000, guid: 011b71221859eb749974d2d5d96eb832, type: 3}
+  - {fileID: 21300000, guid: 9d3fa814495b81948a03a79a50cf43fd, type: 3}
+  - {fileID: 21300000, guid: 9e016104400f0d14c90929d537cb3a5a, type: 3}
+  - {fileID: 21300000, guid: 6ad30067b22ffe64da4b187d7dfa27e6, type: 3}
+  departments:
+  - {fileID: 11400000, guid: d47b792f39d5afe4fbae9e72c764b36e, type: 2}
+  - {fileID: 11400000, guid: 980076547fa81ba46b6db0fe427f16b4, type: 2}
+  - {fileID: 11400000, guid: f4730b94476268f47bb828aa21229319, type: 2}
+  - {fileID: 11400000, guid: ec21afe5a6cf87041b3dd2f009e021e4, type: 2}
+  - {fileID: 11400000, guid: 853c36e40c32c7045b4707975d1a1f18, type: 2}
+  - {fileID: 11400000, guid: 1ec07ba4db7351b4a9402e05db0d3819, type: 2}
+  - {fileID: 11400000, guid: f79307f3dbd81784eb5f8fe7d18fd0fe, type: 2}
+  - {fileID: 11400000, guid: aa5200dc4582aa54d85d39904bb7dc88, type: 2}
+  - {fileID: 11400000, guid: f79307f3dbd81784eb5f8fe7d18fd0fe, type: 2}
+  - {fileID: 11400000, guid: ecc132fa8679d4548a764947cd89623c, type: 2}
+  taskColors:
+  - serializedVersion: 2
+    rgba: 4278502653
+  - serializedVersion: 2
+    rgba: 4292386906
+  - serializedVersion: 2
+    rgba: 4284917504
+  - serializedVersion: 2
+    rgba: 4281486297
+  - serializedVersion: 2
+    rgba: 4281648826
+  - serializedVersion: 2
+    rgba: 4289819283
+  - serializedVersion: 2
+    rgba: 4278190080
+  feedback:
+  - Maximal unterschiedlich!
+  - Ziemlich unterschiedlich!
+  - "\xC4hnlich, aber erkennbar unterschiedlich!"
+  - "\xC4hnlich, fast nicht zu unterscheiden!"
+  - Die Farben sind komplett identisch!
