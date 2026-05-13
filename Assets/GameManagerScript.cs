@@ -118,7 +118,7 @@ public class GameManagerScript : MonoBehaviour
         randomNameText.text = randomName;
 
         // NEU: Gleichen Namen im Color Menu anzeigen
-        colorMenuNameText.text = randomName;
+        colorMenuNameText.text = randomName + ",";
 
         StartCoroutine(WaitTime());
     }
