@@ -40,37 +40,76 @@ public class GameManagerScript : MonoBehaviour
 
 
 
-    // Liste der m�nnlichen Adjektive
-    private string[] adjektive = new string[]
+    // Liste der m�nnlichen Adjektive
+    private string[] adjektiveMaskulin = new string[]
     {
-        "verr�ckter", "lustiger", "komischer", "schr�ger", "alberner", "zappeliger", "flippiger", "witziger", "seltsamer", "spa�iger",
-        "plumper", "lauter", "�berdrehter", "durchgeknallter", "schriller", "cooler", "l�ssiger", "stylischer", "entspannter", "smarter",
-        "trendiger", "moderner", "souver�ner", "chilliger", "lockerer", "selbstsicherer", "eleganter", "flinker", "gl�nzender", "wilder",
-        "starker", "m�chtiger", "brutaler", "rasender", "donnernder", "explosiver", "brennender", "unaufhaltbarer", "tapferer", "mutiger",
-        "furchtloser", "heldenhafter", "krasser", "z�her", "unbesiegbarer", "robuster", "harter", "frostiger", "sonniger", "windiger",
-        "st�rmischer", "erdiger", "felsiger", "nebliger", "feuriger", "wasserreicher", "dunkler", "gruseliger", "finsterer", "geisterhafter",
-        "spukhafter", "unheimlicher", "totenstiller", "schattenhafter", "kluger", "schlauer", "neugieriger", "cleverer", "t�ftelnder",
-        "logischer", "gr�belnder", "analytischer", "gelehrter", "nerdiger", "flauschiger", "zuckers��er", "niedlicher", "funkelnder",
-        "kuscheliger", "fr�hlicher", "glitzernder", "zarter", "hopsiger", "kulleriger", "bunter", "schimmernder", "magischer", "vertr�umter",
-        "freundlicher", "witzelnder", "geheimer", "mysteri�ser", "unsichtbarer", "silberner", "goldener", "stahlharter", "verr�terischer",
+        "verrückter", "lustiger", "komischer", "schräger", "alberner", "zappeliger", "flippiger", "witziger", "seltsamer", "spaßiger",
+        "plumper", "lauter", "überdrehter", "durchgeknallter", "schriller", "cooler", "lässiger", "stylischer", "entspannter", "smarter",
+        "trendiger", "moderner", "souveräner", "chilliger", "lockerer", "selbstsicherer", "eleganter", "flinker", "glänzender", "wilder",
+        "starker", "mächtiger", "brutaler", "rasender", "donnernder", "explosiver", "brennender", "unaufhaltbarer", "tapferer", "mutiger",
+        "furchtloser", "heldenhafter", "krasser", "zäher", "unbesiegbarer", "robuster", "harter", "frostiger", "sonniger", "windiger",
+        "stürmischer", "erdiger", "felsiger", "nebliger", "feuriger", "wasserreicher", "dunkler", "gruseliger", "finsterer", "geisterhafter",
+        "spukhafter", "unheimlicher", "totenstiller", "schattenhafter", "kluger", "schlauer", "neugieriger", "cleverer", "tüftelnder",
+        "logischer", "grübelnder", "analytischer", "gelehrter", "nerdiger", "flauschiger", "zuckersüßer", "niedlicher", "funkelnder",
+        "kuscheliger", "fröhlicher", "glitzernder", "zarter", "hopsiger", "kulleriger", "bunter", "schimmernder", "magischer", "verträumter",
+        "freundlicher", "witzelnder", "geheimer", "mysteriöser", "unsichtbarer", "silberner", "goldener", "stahlharter", "verräterischer",
         "leuchtender", "elektrischer", "mechanischer", "biestiger", "schlammiger", "kantiger", "schneller", "leiser", "aggressiver",
-        "geduldiger", "listiger", "gef�hrlicher", "selbstloser", "frecher", "verschrobener", "verwegener", "legend�rer", "epischer",
+        "geduldiger", "listiger", "gefährlicher", "selbstloser", "frecher", "verschrobener", "verwegener", "legendärer", "epischer",
         "chaotischer", "genialer", "verpeilter", "nasser", "trockener", "blinder", "tauber", "wandelbarer", "fliegender", "tanzender",
-        "singender", "br�llender", "jagender", "zitternder", "schnarchender", "g�hnender", "lachender", "weinender", "tr�umender"
+        "singender", "brüllender", "jagender", "zitternder", "schnarchender", "gähnender", "lachender", "weinender", "träumender"
     };
 
-    // Liste der m�nnlichen Tiere
-    private string[] tiere = new string[]
+    // Liste der weiblicher Adjektive
+    private string[] adjektiveNeutrum = new string[]
     {
-        "L�we", "Tiger", "B�r", "Wolf", "Fuchs", "Hirsch", "Eber", "Rabe", "Panther", "Adler",
-        "Falke", "Geier", "Stier", "Hund", "Kater", "Hahn", "Pfau", "Widder", "Ziegenbock", "Dachs",
-        "Marder", "Schakal", "Igel", "Hase", "Maulwurf", "Biber", "Otter", "Affe", "Gorilla", "Orang-Utan",
-        "Schimpanse", "Elefant", "Wal", "Delphin", "Hai", "Krake", "Fisch", "Pavian", "Yak", "Kojote",
-        "B�ffel", "Zebra", "Nashorn", "Elch", "Mammut", "Drache", "Greif", "Minotaurus", "Zentaur", "Werwolf",
-        "Vogel", "Pinguin", "Strau�", "Kranich", "Schwan", "Spatz", "Specht", "Uhu", "Kauz", "Kondor",
-        "Luchs", "Wiesel", "Frettchen", "Kaninchen", "Kamel", "Esel", "Pony", "Ochse", "Rind", "Maultier",
-        "Frosch", "Kr�terich", "Molch", "Leguan", "Iltis", "K�fer", "Skorpion", "Marienk�fer", "Schmetterling",
-        "K�uzchen", "R�sselk�fer"
+        "verrücktes", "lustiges", "komisches", "schräges", "albernes", "zappeiges", "flippiges", "witziges", "seltsames", "spaßiges",
+        "plumpes", "lautes", "überdrehtes", "durchgeknalltes", "schrilles", "cooles", "lässiges", "stylisches", "entspanntes", "smartes",
+        "trendiges", "modernes", "souveränes", "chilliges", "lockeres", "selbstsicheres", "elegantes", "flinkes", "glänzendes", "wildes",
+        "starkes", "mächtiges", "brutales", "rasendes", "donnerndes", "explosives", "brennendes", "unaufhaltbares", "tapferes", "mutiges",
+        "furchtloses", "heldenhaftes", "krasses", "zähes", "unbesiegbares", "robustes", "hartes", "frostiges", "sonniges", "windiges",
+        "stürmisches", "erdiges", "felsiges", "nebliges", "feuriges", "wasserreiches", "dunkles", "gruseliges", "finsteres", "geisterhaftes",
+        "spukhaftes", "unheimliches", "totenstilles", "schattenhaftes", "kluges", "schlaues", "neugieriges", "cleveres", "tüftelndes",
+        "logisches", "grübelndes", "analytisches", "gelehrtes", "nerdiges", "flauschiges", "zuckersüßes", "niedliches", "funkelndes",
+        "kuscheliges", "fröhliches", "glitzerndes", "zartes", "hopsiges", "kulleriges", "buntes", "schimmerndes", "magisches", "verträumtes",
+        "freundliches", "witzelndes", "geheimes", "mysteriöses", "unsichtbares", "silbernes", "goldenes", "stahlhartes", "verräterisches",
+        "leuchtendes", "elektrisches", "mechanisches", "biestiges", "schlammiges", "kantiges", "schnelles", "leises", "aggressives",
+        "geduldiges", "listiges", "gefährliches", "selbstloses", "freches", "verschrobenes", "verwegenes", "legendäres", "episches",
+        "chaotisches", "geniales", "verpeiltes", "nasses", "trockenes", "blindes", "taubes", "wandelbares", "fliegendes", "tanzendes",
+        "singendes", "brüllendes", "jagendes", "zitterndes", "schnarschendes", "gähnendes", "lachendes", "weinendes", "träumendes"
+    };
+
+    // Liste der sachlichen Adjektive
+    private string[] adjektiveFeminin = new string[]
+    {
+        "verrückte", "lustige", "komische", "schräge", "alberne", "zappelige", "flippige", "witzige", "seltsame", "spaßige",
+        "plumpe", "laute", "überdrehte", "durchgeknallte", "schrille", "coole", "lässige", "stylische", "entspannte", "smarte",
+        "trendige", "moderne", "souveräne", "chillige", "lockere", "selbstsichere", "elegante", "flinke", "glänzende", "wilde",
+        "starke", "mächtige", "brutale", "rasende", "donnernde", "explosive", "brennende", "unaufhaltbare", "tapfere", "mutige",
+        "furchtlose", "heldenhafte", "krasse", "zähe", "unbesiegbare", "robuste", "harte", "frostige", "sonnige", "windige",
+        "stürmische", "erdige", "felsige", "neblige", "feurige", "wasserreiche", "dunkle", "gruselige", "finstere", "geisterhafte",
+        "spukhafte", "unheimliche", "totenstille", "schattenhafte", "kluge", "schlaue", "neugierige", "clevere", "tüftelnde",
+        "logische", "grübelnde", "analytische", "gelehrte", "nerdige", "flauschige", "zuckersüße", "niedliche", "funkelnde",
+        "kuschelige", "fröhliche", "glitzernde", "zarte", "hopsige", "kullerige", "bunte", "schimmernde", "magische", "verträumte",
+        "freundliche", "witzelnde", "geheime", "mysteriöse", "unsichtbare", "silberne", "goldene", "stahlharte", "verräterische",
+        "leuchtende", "elektrische", "mechanische", "biestige", "schlammige", "kantige", "schnelle", "leise", "aggressive",
+        "geduldige", "listige", "gefährliche", "selbstlose", "freche", "verschrobene", "verwegene", "legendäre", "epische",
+        "chaotische", "geniale", "verpeite", "nasse", "trockene", "blinde", "taube", "wandelbare", "fliegende", "tanzende",
+        "singende", "brüllende", "jagende", "zitternde", "schnarchende", "gähnende", "lachende", "weinende", "träumende"
+    };
+
+    //Namen der Tiere
+   private string[] tiere = new string[]
+    {
+        "M:Löwe", "M:Tiger", "M:Bär", "M:Wolf", "M:Fuchs", "M:Hirsch", "M:Eber", "M:Rabe", "M:Panther", "M:Adler",
+        "M:Falke", "M:Geier", "M:Stier", "M:Hund", "M:Kater", "M:Hahn", "M:Pfau", "M:Widder", "M:Ziegenbock", "M:Dachs",
+        "M:Marder", "M:Schakal", "M:Igel", "M:Hase", "M:Maulwurf", "M:Biber", "M:Otter", "M:Affe", "M:Gorilla", "M:Orang-Utan",
+        "M:Schimpanse", "M:Elefant", "M:Wal", "M:Delphin", "M:Hai", "M:Krake", "M:Fisch", "M:Pavian", "M:Yak", "M:Kojote",
+        "M:Büffel", "M:Elch", "M:Drache", "M:Greif", "M:Minotaurus", "M:Zentaur", "M:Werwolf",
+        "M:Vogel", "M:Pinguin", "M:Strauß", "M:Kranich", "M:Schwan", "M:Spatz", "M:Specht", "M:Uhu", "M:Kauz", "M:Kondor",
+        "M:Luchs", "M:Esel", "M:Ochse", "M:Frosch", "M:Kröterich", "M:Molch", "M:Leguan", "M:Iltis",
+        "M:Käfer", "M:Skorpion", "M:Marienkäfer", "M:Schmetterling", "M:Rüsselkäfer",
+        "N:Zebra", "N:Nashorn", "N:Mammut", "N:Wiesel", "N:Frettchen", "N:Kaninchen", "N:Kamel", "N:Pony", "N:Rind", "N:Maultier",
+        "N:Käuzchen"
     };
 
 
@@ -115,7 +154,17 @@ public class GameManagerScript : MonoBehaviour
 
     public void ChooseRandomName()
     {
-        randomName = adjektive[Random.Range(0, adjektive.Length)] + " " + tiere[Random.Range(0, tiere.Length)];
+        string eintrag = tiere[Random.Range(0, tiere.Length)]; //Random Tier auswählen
+        char genus = eintrag[0]; //"M" oder "N" als genus speichen
+        string tierName = eintrag.Substring(2); //"M:" oder "N:" entfernen
+        string adjektiv;
+
+        if (genus == 'M')
+            adjektiv = adjektiveMaskulin[Random.Range(0, adjektiveMaskulin.Length)];
+        else
+            adjektiv = adjektiveNeutrum[Random.Range(0, adjektiveNeutrum.Length)];
+
+        randomName = adjektiv + " " + tierName;
         randomNameText.text = randomName;
         StartCoroutine(WaitTime());
     }
