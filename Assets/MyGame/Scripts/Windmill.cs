@@ -15,7 +15,8 @@ public class Windmill : MonoBehaviour
     [SerializeField] private AudioSource windmillEngine;
 
     [SerializeField] public bool isWindmillSelected = false;
-    private const float MAX_LIGHT_INTENSITY = 1f;
+    private const float MAX_LIGHT_INTENSITY = 5f; //höherer Wert für mehr Intensität
+    private Color originalLampColor; //Originale Farbe
 
     // Für pulsierende Animation
     private Vector3 originalScale;
@@ -32,9 +33,13 @@ public class Windmill : MonoBehaviour
 
         originalScale = transform.localScale;
 
-        ToggleLamp();
         SetLampColor(color);
-        
+
+        // originale Farbe speichern
+        originalLampColor = lampLight.color;
+
+        lampLight.enabled = false;
+
     }
 
     private void Update()
@@ -91,9 +96,24 @@ public class Windmill : MonoBehaviour
 
     private void UpdateLightIntensity()
     {
-        if (lampLight != null)
+        if (lampLight != null && rotor != null)
         {
-            lampLight.intensity = Mathf.Lerp(0f, MAX_LIGHT_INTENSITY, speedSlider.value / 255f);
+            float normalizedSpeed = rotor.currentSpeed / 255f;
+
+            // sanfter Verlauf
+            float curvedValue = Mathf.Pow(normalizedSpeed, 2f);
+
+            // Intensität
+            float targetIntensity = Mathf.Lerp(0.2f, MAX_LIGHT_INTENSITY, curvedValue);
+
+            lampLight.intensity = Mathf.Lerp(
+                lampLight.intensity,
+                targetIntensity,
+                Time.deltaTime * 5f
+            );
+
+            // Auch die Reichweite verändern
+            lampLight.range = Mathf.Lerp(2f, 5f, curvedValue);
         }
     }
 
@@ -161,14 +181,20 @@ public class Windmill : MonoBehaviour
     public void HighlightLamp()
     {
         lampLight.enabled = true;
-        SetLampColor(color);
+
+        // originale Farbe wiederherstellen
+        lampLight.color = originalLampColor;
         lampLight.intensity = 1f;
     }
 
     public void DimLamp()
     {
         lampLight.enabled = true;
-        lampLight.color = Color.gray;
+
+        // Farbe NICHT überschreiben
+        lampLight.color = originalLampColor;
+
+        // nur Intensität reduzieren
         lampLight.intensity = 0.2f;
     }
 
