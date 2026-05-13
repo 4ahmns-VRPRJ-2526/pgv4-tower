@@ -8,6 +8,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/MyGame/Scenes/SampleScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
+  - enabled: 1
+    path: Assets/MyGame/Scenes/TestScene.unity
+    guid: c69d95676bb8e944780cecc0bac62003
+  - enabled: 1
+    path: Assets/MyGame/Scenes/ModiDesktop.unity
+    guid: 3b35da1c098b12640b0bf0bf2be88484
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 1a4c68ca72a83449f938d669337cb305, type: 2}

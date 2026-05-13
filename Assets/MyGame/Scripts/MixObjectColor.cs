@@ -63,24 +63,28 @@ public class MixObjectColor : MonoBehaviour
         mixedColor = new Color32(0, 0, 0, 255);
         objMaterial.color = mixedColor;
 
+        // Array für Kübel - Sucht auch in Unterobjekten (Children)
         if (kuebelObjects != null)
         {
-            foreach (GameObject kuebel in kuebelObjects)
+            for (int i = 0; i < kuebelObjects.Length; i++)
             {
-                if (kuebel != null)
+                if (kuebelObjects[i] != null)
                 {
-                    kuebel.GetComponent<MeshRenderer>().material = objMaterial;
+                    MeshRenderer mr = kuebelObjects[i].GetComponentInChildren<MeshRenderer>();
+                    if (mr != null) mr.material = objMaterial;
                 }
             }
         }
 
+        // Array für Pipes - Sucht auch in Unterobjekten (Children)
         if (pipeObjects != null)
         {
-            foreach (GameObject pipe in pipeObjects)
+            for (int i = 0; i < pipeObjects.Length; i++)
             {
-                if (pipe != null)
+                if (pipeObjects[i] != null)
                 {
-                    pipe.GetComponent<MeshRenderer>().material = objMaterial;
+                    MeshRenderer mr = pipeObjects[i].GetComponentInChildren<MeshRenderer>();
+                    if (mr != null) mr.material = objMaterial;
                 }
             }
         }
@@ -201,7 +205,7 @@ public class MixObjectColor : MonoBehaviour
         }
 
         mixedColor = new Color32(r, g, b, 255);
-        objMaterial.color = mixedColor;
+        ApplyColorToArrays();
     }
 
     public void IncreaseFillState(ColorRGB color)
@@ -242,7 +246,7 @@ public class MixObjectColor : MonoBehaviour
         }
 
         mixedColor = new Color32(r, g, b, 255);
-        objMaterial.color = mixedColor;
+        ApplyColorToArrays();
     }
 
     public float MapRange(float inputValue)
@@ -262,9 +266,8 @@ public class MixObjectColor : MonoBehaviour
 
     public void ResetPipeStation()
     {
-        // Wir nehmen an, TaskToDo ist ein Enum in einem anderen deiner Skripte
         mixedColor = peppersGhostData.taskColors[(int)TaskToDo.None];
-        objMaterial.color = mixedColor;
+        ApplyColorToArrays();
 
         if (pipeMode == PipeMode.Decrease)
         {
@@ -283,6 +286,33 @@ public class MixObjectColor : MonoBehaviour
             if (redParticleSystem.isPlaying && PipeEmpty(ColorRGB.Red)) redParticleSystem.Stop();
             if (greenParticleSystem.isPlaying && PipeEmpty(ColorRGB.Green)) greenParticleSystem.Stop();
             if (blueParticleSystem.isPlaying && PipeEmpty(ColorRGB.Blue)) blueParticleSystem.Stop();
+        }
+    }
+
+    private void ApplyColorToArrays()
+    {
+        if (kuebelObjects != null)
+        {
+            for (int i = 0; i < kuebelObjects.Length; i++)
+            {
+                if (kuebelObjects[i] != null)
+                {
+                    MeshRenderer mr = kuebelObjects[i].GetComponentInChildren<MeshRenderer>();
+                    if (mr != null) mr.material.color = mixedColor;
+                }
+            }
+        }
+
+        if (pipeObjects != null)
+        {
+            for (int i = 0; i < pipeObjects.Length; i++)
+            {
+                if (pipeObjects[i] != null)
+                {
+                    MeshRenderer mr = pipeObjects[i].GetComponentInChildren<MeshRenderer>();
+                    if (mr != null) mr.material.color = mixedColor;
+                }
+            }
         }
     }
 }
