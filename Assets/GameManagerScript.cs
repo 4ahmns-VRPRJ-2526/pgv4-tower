@@ -205,5 +205,6 @@ public class GameManagerScript : MonoBehaviour
         return Mathf.Clamp((float)System.Math.Round(knappheit * 100f, 2), 0f, 100f);
 
     }
+    
 }
 
