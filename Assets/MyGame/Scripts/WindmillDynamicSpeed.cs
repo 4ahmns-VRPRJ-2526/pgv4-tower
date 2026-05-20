@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.UI;
 
 public class WindmillDynamicSpeed : MonoBehaviour
@@ -10,6 +11,7 @@ public class WindmillDynamicSpeed : MonoBehaviour
     [SerializeField] private float acceleration = 50f; // Speed increase per second
     [SerializeField] private float deceleration = 30f; // Speed decrease per second
     private float currentSpeed = 0f; // Current rotation speed
+    [SerializeField] private AudioSource WindMillStartSound;
 
     private void Update()
     {
@@ -17,6 +19,10 @@ public class WindmillDynamicSpeed : MonoBehaviour
         if (Input.GetKey(KeyCode.Space))
         {
             currentSpeed += acceleration * Time.deltaTime;
+            if (!WindMillStartSound.isPlaying)
+            {
+                WindMillStartSound.Play();
+            }
         }
         else
         {
