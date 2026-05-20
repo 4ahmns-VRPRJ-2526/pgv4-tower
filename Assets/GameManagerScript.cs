@@ -24,6 +24,12 @@ public class GameManagerScript : MonoBehaviour
     public GameObject randomNameCanvas;
     public string randomName;
     public TMP_Text randomNameText;
+    public TMP_Text GenerationsLeftText;
+    private int numberOfNameGenerations;
+    private int numberOfGenerationsLeft;
+    public int numberOfNameGenerationsIsLimitedTo = 3;
+    public Button generateNameButton;
+    public Button chooseNameButton;
 
     public Animator ghostAnimator;
     public WindmillManager wma;
@@ -76,6 +82,12 @@ public class GameManagerScript : MonoBehaviour
 
     void Start()
     {
+        numberOfNameGenerations = 0;
+        numberOfGenerationsLeft = numberOfNameGenerationsIsLimitedTo;
+        GenerationsLeftText.text = numberOfGenerationsLeft.ToString();
+
+        randomNameCanvas.SetActive(false);
+
         if (Display.displays.Length > 1)
         {
             Display.displays[1].Activate(); // Display 2 aktivieren
@@ -115,14 +127,43 @@ public class GameManagerScript : MonoBehaviour
 
     public void ChooseRandomName()
     {
-        randomName = adjektive[Random.Range(0, adjektive.Length)] + " " + tiere[Random.Range(0, tiere.Length)];
-        randomNameText.text = randomName;
-        StartCoroutine(WaitTime());
+        if (numberOfNameGenerations < numberOfNameGenerationsIsLimitedTo)
+        {
+            randomName = adjektive[Random.Range(0, adjektive.Length)] + " " + tiere[Random.Range(0, tiere.Length)];
+            randomNameText.text = randomName;
+
+            numberOfNameGenerations += 1;
+
+            numberOfGenerationsLeft = numberOfNameGenerationsIsLimitedTo - numberOfNameGenerations;
+            GenerationsLeftText.text = numberOfGenerationsLeft.ToString();
+        }
+
+        if (numberOfNameGenerations >= numberOfNameGenerationsIsLimitedTo)
+        {
+            generateNameButton.interactable = false;
+        }
+
+        if (numberOfNameGenerations > 0 && randomNameText.text != null)
+        {
+            chooseNameButton.interactable = true;
+        }
+        else
+        {
+            chooseNameButton.interactable = false;
+        }
     }
+    public void ChooseThisName()
+    {
+        if (numberOfNameGenerations > 0 && randomNameText.text != null) // das if statement ist nicht unbedingt notwendig, da der Button nicht interactable ist, wenn dieses if nicht erfüllt ist
+        {
+            randomNameCanvas.SetActive(false);
+            ActivateCoulorCanvas();
+        }
+    }
+
     public void ActivateCoulorCanvas()
     {
         colourCanvas.SetActive(true);
-
     }
 
     public void SelectColorGoal(int a)
