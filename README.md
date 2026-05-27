@@ -92,13 +92,3 @@ Recommended workflow:
 1. Create feature branch
 2. Implement changes
 3. Review and merge into main
-
-
-## Bedienung und Beenden der Anwendung
-
-Die Anwendung wird über den Touchscreen bedient.
-Die Anwendung kann jederzeit mit der Taste `Q` beendet werden.
-Zusätzlich gibt es einen versteckten Touch-Bereich in der linken oberen Ecke des Bildschirms. Dieser ist speziell für den Ausstellungsbetrieb vorgesehen damit man die Anwendung über diesen Bereich ebenfalls zu jeder Zeit beenden kann. Dazu muss der Touch-Bereich mindestens 5 Sekunden lang gedrückt gehalten werden, damit eine unbeabsichtigte Beendung verhindert wird.
-
-
-
