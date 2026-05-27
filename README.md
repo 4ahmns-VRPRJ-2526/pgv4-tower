@@ -92,3 +92,24 @@ Recommended workflow:
 1. Create feature branch
 2. Implement changes
 3. Review and merge into main
+
+
+
+## Project Description
+
+1.Projectgoal
+With this project, we are building an interactive game for kids to learn how
+additive color mixing (the RGB process) works in a playful way. The children have
+to mix a given target color as accurately as possible. By blowing into the
+windmills using a straw, they control the intensity of the colors Red, Green, and
+Blue coming out of each mill.
+
+2.Pepper's Ghost
+The visuals are based on the classic illusion trick called "Pepper’s Ghost". A
+hidden monitor reflects the image onto a diagonally mounted, semi-transparent pane.
+For the kids, it creates the illusion of a 3D hologram floating freely in mid-air,
+which they can interact with just by blowing.
+
+3.Use Case
+This project is designed as an interactive exhibition installation, perfect for
+things like museums, science workshops, or open house days.
