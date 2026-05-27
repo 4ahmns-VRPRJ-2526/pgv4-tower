@@ -199,7 +199,7 @@ public class GameManagerScript : MonoBehaviour
 
             float similarity = GetColorSimilarityPercentage(_goalColour, mixed);
 
-            procentageText.text = similarity + "%";
+            procentageText.text = similarity.ToString("F2") + "%";
 
             // =========================
             // Kreise
@@ -289,15 +289,43 @@ public class GameManagerScript : MonoBehaviour
 
     float GetColorSimilarityPercentage(Color a, Color b)
     {
-        float rDiff = a.r - b.r;
-        float gDiff = a.g - b.g;
-        float bDiff = a.b - b.b;
+        // RGB Werte von 0–1 auf 0–255 umrechnen
+        float r1 = a.r * 255f;
+        float g1 = a.g * 255f;
+        float b1 = a.b * 255f;
 
-        float distance = Mathf.Sqrt(rDiff * rDiff + gDiff * gDiff + bDiff * bDiff);
-        float knappheit = 1f - (distance / Mathf.Sqrt(3f));
+        float r2 = b.r * 255f;
+        float g2 = b.g * 255f;
+        float b2 = b.b * 255f;
 
-        return Mathf.Clamp((float)System.Math.Round(knappheit * 100f, 2), 0f, 100f);
+        // Differenzen berechnen
+        float rDiff = r1 - r2;
+        float gDiff = g1 - g2;
+        float bDiff = b1 - b2;
 
+        // Euklidische Distanz
+        float distance = Mathf.Sqrt(
+            rDiff * rDiff +
+            gDiff * gDiff +
+            bDiff * bDiff
+        );
+
+        // Maximale RGB Distanz
+        float maxDistance = Mathf.Sqrt(
+            255f * 255f +
+            255f * 255f +
+            255f * 255f
+        );
+
+        // Ähnlichkeit berechnen
+        float similarity = 1f - (distance / maxDistance);
+
+        // Prozent zurückgeben
+        return Mathf.Clamp(
+            (float)System.Math.Round(similarity * 100f, 2),
+            0f,
+            100f
+        );
     }
 }
 
