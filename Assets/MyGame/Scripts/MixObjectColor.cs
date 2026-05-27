@@ -63,7 +63,7 @@ public class MixObjectColor : MonoBehaviour
         mixedColor = new Color32(0, 0, 0, 255);
         objMaterial.color = mixedColor;
 
-        // Array für Kübel - Sucht auch in Unterobjekten (Children)
+        // Array für Kübel
         if (kuebelObjects != null)
         {
             for (int i = 0; i < kuebelObjects.Length; i++)
@@ -76,7 +76,7 @@ public class MixObjectColor : MonoBehaviour
             }
         }
 
-        // Array für Pipes - Sucht auch in Unterobjekten (Children)
+        // Array für Pipes
         if (pipeObjects != null)
         {
             for (int i = 0; i < pipeObjects.Length; i++)
