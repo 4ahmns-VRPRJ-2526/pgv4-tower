@@ -178,6 +178,18 @@ public class GameManagerScript : MonoBehaviour
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
+
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+#if UNITY_EDITOR
+            
+            UnityEditor.EditorApplication.isPlaying = false;
+#else
+            // Beendet die Anwendung im Build
+            Application.Quit();
+#endif
+        }
+
     }
 
     public IEnumerator WaitTime()
