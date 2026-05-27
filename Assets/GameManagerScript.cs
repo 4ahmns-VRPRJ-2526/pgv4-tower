@@ -38,6 +38,32 @@ public class GameManagerScript : MonoBehaviour
     public GameObject finishedGameCanvas;
     bool alreadyPulled = false;
 
+    [Header("Result UI")]
+
+    // Kreise
+
+    [SerializeField] Image compareLeftHalf;
+    [SerializeField] Image compareRightHalf;
+
+    // RGB Bars Ziel
+    [SerializeField] Image goalRBar;
+    [SerializeField] Image goalGBar;
+    [SerializeField] Image goalBBar;
+
+    // RGB Bars Mix
+    [SerializeField] Image mixRBar;
+    [SerializeField] Image mixGBar;
+    [SerializeField] Image mixBBar;
+
+    // RGB Texte Ziel
+    [SerializeField] TMP_Text goalRText;
+    [SerializeField] TMP_Text goalGText;
+    [SerializeField] TMP_Text goalBText;
+
+    // RGB Texte Mix
+    [SerializeField] TMP_Text mixRText;
+    [SerializeField] TMP_Text mixGText;
+    [SerializeField] TMP_Text mixBText;
 
 
     // Liste der männlichen Adjektive
@@ -169,10 +195,78 @@ public class GameManagerScript : MonoBehaviour
             goalSphereParent.SetActive(true);
             alreadyPulled = true;
 
-            float similarity = GetColorSimilarityPercentage(_goalColour, wma.windmillColor);
-            goalSphere.GetComponent<Renderer>().material.color = _goalColour;
-            achievedSphere.GetComponent<Renderer>().material.color = wma.windmillColor;
+            Color mixed = wma.windmillColor;
+
+            float similarity = GetColorSimilarityPercentage(_goalColour, mixed);
+
             procentageText.text = similarity + "%";
+
+            // =========================
+            // Kreise
+            // =========================
+
+            compareLeftHalf.color = new Color(
+                _goalColour.r,
+                _goalColour.g,
+                _goalColour.b,
+                1f
+            );
+
+            compareRightHalf.color = new Color(
+                mixed.r,
+                mixed.g,
+                mixed.b,
+                1f
+            );
+
+            // =========================
+            // RGB Werte Ziel
+            // =========================
+
+            int goalR = Mathf.RoundToInt(_goalColour.r * 255);
+            int goalG = Mathf.RoundToInt(_goalColour.g * 255);
+            int goalB = Mathf.RoundToInt(_goalColour.b * 255);
+
+            // =========================
+            // RGB Werte Mix
+            // =========================
+
+            int mixR = Mathf.RoundToInt(mixed.r * 255);
+            int mixG = Mathf.RoundToInt(mixed.g * 255);
+            int mixB = Mathf.RoundToInt(mixed.b * 255);
+
+            // =========================
+            // Texte setzen
+            // =========================
+
+            goalRText.text = goalR.ToString();
+            goalGText.text = goalG.ToString();
+            goalBText.text = goalB.ToString();
+
+            mixRText.text = mixR.ToString();
+            mixGText.text = mixG.ToString();
+            mixBText.text = mixB.ToString();
+
+            // =========================
+            // Balken füllen
+            // =========================
+
+            goalRBar.fillAmount = goalR / 255f;
+            goalGBar.fillAmount = goalG / 255f;
+            goalBBar.fillAmount = goalB / 255f;
+
+            mixRBar.fillAmount = mixR / 255f;
+            mixGBar.fillAmount = mixG / 255f;
+            mixBBar.fillAmount = mixB / 255f;
+
+            // Farben der Balken
+            goalRBar.color = Color.red;
+            goalGBar.color = Color.green;
+            goalBBar.color = Color.blue;
+
+            mixRBar.color = Color.red;
+            mixGBar.color = Color.green;
+            mixBBar.color = Color.blue;
         }
         else if (Input.GetKeyDown(KeyCode.UpArrow) && alreadyPulled)
         {
