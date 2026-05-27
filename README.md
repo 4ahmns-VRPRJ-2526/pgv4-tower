@@ -92,3 +92,13 @@ Recommended workflow:
 1. Create feature branch
 2. Implement changes
 3. Review and merge into main
+
+## Start Instructions
+
+1. Open the Unity Hub
+2. Open the project pgv4-tower using Unity version 6000.0.57f1
+3. Open the Scene in the Project Window: 
+	Assets/MyGame/Scenes/WindmillRGB
+4. Press the Play button in the Unity Editor to start the Game
+5. The Game will start in Play Mode
+6. To switch screens, select Display 2 in the upper-left corner of the Game View window
