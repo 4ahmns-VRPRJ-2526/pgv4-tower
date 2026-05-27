@@ -102,3 +102,18 @@ Recommended workflow:
 4. Press the Play button in the Unity Editor to start the Game
 5. The Game will start in Play Mode
 6. To switch screens, select Display 2 in the upper-left corner of the Game View window
+
+## Windows Build
+
+1. Open the Unity Editor
+2. Go to File > Build Profiles
+3. Open the "Windows" profile and press "Activate" if it is not already active
+4. Press "Open Scene List"
+5. If you are currently in the "WindmillsRGB" scene, press "Add Open Scenes"
+6. If you are not in the correct scene, open it first (see "## Start Instructions")
+7. Go back to the Windows profile and verify the following settings:
+	- Architecture: "Intel 64-bit"
+	- Build and Run on: "Local Machine"
+	- Compression Method: "Default"
+	- No checkboxes selected
+8. Press "Build" and choose any folder as the output directory
