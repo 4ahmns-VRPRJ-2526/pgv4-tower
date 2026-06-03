@@ -97,3 +97,26 @@ Recommended workflow:
 2. Implement changes
 3. Review and merge into main
 
+## Touchscreen Operation
+
+* The application is optimized for Touchscreen use.
+* All important UI Elements should be easily accessible by touch.
+* Check Touchscreen calibration before the presentation.
+
+## Exit without a Keyboard
+
+* Tap the touchscreen in the upper left corner for 5 seconds.
+* A red rectangle will slowly appear, followed by an exit button.
+* Tap the button to end the game.
+
+## Full Screen/Windows Build
+
+* Start the application in Fullscreen mode.
+* Use the latest Windows build for the presentation.
+* Verify screen Resolution and scaling Settings beforehand.
+
+## Tests before the Demonstration
+
+* Download SetUp-Instructions in GitHub.
+* Follow the instructions.
+* Test the complete application flow once before presenting.
