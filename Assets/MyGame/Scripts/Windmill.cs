@@ -7,6 +7,7 @@ public class Windmill : MonoBehaviour
 {
     private enum WindmillColors { RED, GREEN, BLUE };
 
+    [Header("Settings")]
     [SerializeField] private WindmillColors color;
     [SerializeField] public RotorHub rotor;
     [SerializeField] private Light lampLight;
@@ -14,18 +15,21 @@ public class Windmill : MonoBehaviour
     [SerializeField] private TMP_Text lockedText;
     [SerializeField] private AudioSource windmillEngine;
 
-    [SerializeField] public bool isWindmillSelected = false;
-    private const float MAX_LIGHT_INTENSITY = 5f; //höherer Wert für mehr Intensität
-    private Color originalLampColor; //Originale Farbe
+    [Header("Glass Cable Settings")]
+    [SerializeField] private Renderer cylinderRenderer;
+    private Color baseColor;
 
-    // Für pulsierende Animation
+    [SerializeField] public bool isWindmillSelected = false;
+    private const float MAX_LIGHT_INTENSITY = 1f;
+
+    [Header("Pulse Animation")]
     private Vector3 originalScale;
     [SerializeField] private float pulseSpeed = 2f;
     [SerializeField] private float pulseMagnitude = 0.05f;
 
     private void Start()
     {
-        if (!lampLight || !rotor || !speedSlider)
+        if (!lampLight || !rotor || !speedSlider || !cylinderRenderer)
         {
             Debug.LogWarning("Windmill: Nicht alle Referenzen sind gesetzt.");
             return;
@@ -33,25 +37,30 @@ public class Windmill : MonoBehaviour
 
         originalScale = transform.localScale;
 
+        baseColor = GetColorFromEnum(color);
+
+        Color clearGlass = new Color(0.9f, 0.9f, 0.9f, 0.15f);
+        cylinderRenderer.material.color = clearGlass;
+
+        cylinderRenderer.material.SetColor("_EmissionColor", Color.black);
+        cylinderRenderer.material.DisableKeyword("_EMISSION");
+
+        speedSlider.value = 0;
+
+        ToggleLamp();
         SetLampColor(color);
-
-        // originale Farbe speichern
-        originalLampColor = lampLight.color;
-
-        lampLight.enabled = false;
-
     }
 
     private void Update()
     {
         UpdateUI();
-        UpdateLightIntensity();
+        UpdateVisuals();
 
         if (isWindmillSelected)
         {
             rotor.RotateRotor(true);
             AnimatePulse();
-            windmillEngine.Play();
+            if (!windmillEngine.isPlaying) windmillEngine.Play();
         }
         else
         {
@@ -63,6 +72,44 @@ public class Windmill : MonoBehaviour
             }
 
             ResetScale();
+            if (windmillEngine.isPlaying) windmillEngine.Stop();
+        }
+    }
+
+    private void UpdateVisuals()
+    {
+        if (lampLight != null && cylinderRenderer != null)
+        {
+            float factor = speedSlider.value / 255f;
+
+            lampLight.intensity = Mathf.Lerp(0f, MAX_LIGHT_INTENSITY, factor);
+
+            Color clearGlass = new Color(0.9f, 0.9f, 0.9f, 0.15f);
+            Color fullColor = new Color(baseColor.r, baseColor.g, baseColor.b, 0.7f);
+
+            cylinderRenderer.material.color = Color.Lerp(clearGlass, fullColor, factor);
+
+            if (factor > 0f)
+            {
+                cylinderRenderer.material.SetColor("_EmissionColor", baseColor * (factor * 3f));
+                cylinderRenderer.material.EnableKeyword("_EMISSION");
+            }
+            else
+            {
+                cylinderRenderer.material.SetColor("_EmissionColor", Color.black);
+                cylinderRenderer.material.DisableKeyword("_EMISSION");
+            }
+        }
+    }
+
+    private Color GetColorFromEnum(WindmillColors c)
+    {
+        switch (c)
+        {
+            case WindmillColors.RED: return Color.red;
+            case WindmillColors.GREEN: return Color.green;
+            case WindmillColors.BLUE: return Color.blue;
+            default: return Color.white;
         }
     }
 
@@ -94,49 +141,19 @@ public class Windmill : MonoBehaviour
         }
     }
 
-    private void UpdateLightIntensity()
-    {
-        if (lampLight != null && rotor != null)
-        {
-            float normalizedSpeed = rotor.currentSpeed / 255f;
-
-            // sanfter Verlauf
-            float curvedValue = Mathf.Pow(normalizedSpeed, 2f);
-
-            // Intensität
-            float targetIntensity = Mathf.Lerp(0.2f, MAX_LIGHT_INTENSITY, curvedValue);
-
-            lampLight.intensity = Mathf.Lerp(
-                lampLight.intensity,
-                targetIntensity,
-                Time.deltaTime * 5f
-            );
-
-            // Auch die Reichweite verändern
-            lampLight.range = Mathf.Lerp(2f, 5f, curvedValue);
-        }
-    }
-
     private void SetLampColor(WindmillColors windmillColor)
     {
         switch (windmillColor)
         {
-            case WindmillColors.RED:
-                lampLight.color = Color.red;
-                break;
-            case WindmillColors.GREEN:
-                lampLight.color = Color.green;
-                break;
-            case WindmillColors.BLUE:
-                lampLight.color = Color.blue;
-                break;
+            case WindmillColors.RED: lampLight.color = Color.red; break;
+            case WindmillColors.GREEN: lampLight.color = Color.green; break;
+            case WindmillColors.BLUE: lampLight.color = Color.blue; break;
         }
     }
 
     public void SelectWindmill()
     {
         isWindmillSelected = true;
-
         if (!lampLight.isActiveAndEnabled)
         {
             lampLight.enabled = true;
@@ -150,7 +167,7 @@ public class Windmill : MonoBehaviour
         isWindmillSelected = false;
         rotor.currentSpeed = 0;
         speedSlider.value = 0;
-        ToggleLamp();
+        if (lampLight.enabled) ToggleLamp();
         ResetScale();
     }
 
@@ -169,33 +186,15 @@ public class Windmill : MonoBehaviour
 
     public void ToggleLockStatus()
     {
-        lockedText.text = isWindmillSelected ? "Unlock" : "Lock";
+        if (lockedText != null)
+            lockedText.text = isWindmillSelected ? "Unlock" : "Lock";
+
         EventSystem.current.SetSelectedGameObject(null);
         WindmillManager manager = FindObjectOfType<WindmillManager>();
         if (manager != null)
         {
             manager.LockAllExcept(this);
         }
-    }
-
-    public void HighlightLamp()
-    {
-        lampLight.enabled = true;
-
-        // originale Farbe wiederherstellen
-        lampLight.color = originalLampColor;
-        lampLight.intensity = 1f;
-    }
-
-    public void DimLamp()
-    {
-        lampLight.enabled = true;
-
-        // Farbe NICHT überschreiben
-        lampLight.color = originalLampColor;
-
-        // nur Intensität reduzieren
-        lampLight.intensity = 0.2f;
     }
 
     private void AnimatePulse()
@@ -207,5 +206,38 @@ public class Windmill : MonoBehaviour
     private void ResetScale()
     {
         transform.localScale = originalScale;
+    }
+
+
+    public void HighlightLamp()
+    {
+        if (lampLight != null)
+        {
+            lampLight.enabled = true;
+            SetLampColor(color);
+            lampLight.intensity = 1f;
+        }
+
+        if (cylinderRenderer != null)
+        {
+            cylinderRenderer.material.color = new Color(baseColor.r, baseColor.g, baseColor.b, 0.4f);
+            cylinderRenderer.material.SetColor("_EmissionColor", baseColor * 2f);
+        }
+    }
+
+    public void DimLamp()
+    {
+        if (lampLight != null)
+        {
+            lampLight.enabled = true;
+            lampLight.color = Color.gray;
+            lampLight.intensity = 0.2f;
+        }
+
+        if (cylinderRenderer != null)
+        {
+            cylinderRenderer.material.color = new Color(0.5f, 0.5f, 0.5f, 0.2f);
+            cylinderRenderer.material.SetColor("_EmissionColor", Color.black);
+        }
     }
 }

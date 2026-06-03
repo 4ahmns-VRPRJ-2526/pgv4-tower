@@ -14,6 +14,8 @@ public class WindmillManager : MonoBehaviour
     private Windmill currentSelectedWindmill;
     private bool allWindmillsLocked = false;
 
+    public Renderer glowingResultCube;
+
     [Header("ParticleSystems")]
     public ParticleSystem particlesTop;
     public GameObject[] objectsToColor;
@@ -28,7 +30,7 @@ public class WindmillManager : MonoBehaviour
 
         if (windmills.Length == 0)
         {
-            Debug.LogError("WindmillManager: Keine Windmühlen oder Farbwand zugewiesen!");
+            Debug.LogError("WindmillManager: Keine Windm?hlen oder Farbwand zugewiesen!");
             return;
         }
 
@@ -56,6 +58,15 @@ public class WindmillManager : MonoBehaviour
             {
                 rend.material.color = windmillColor;
             }
+        }
+
+        if (glowingResultCube != null)
+        {
+            glowingResultCube.material.color = windmillColor;
+
+            Color emissionColor = windmillColor;
+            glowingResultCube.material.SetColor("_EmissionColor", emissionColor);
+            glowingResultCube.material.EnableKeyword("_EMISSION");
         }
     }
     public void ResetScene()
@@ -98,7 +109,7 @@ public class WindmillManager : MonoBehaviour
         }
         else
         {
-            //Sperrt alle außer this
+            //Sperrt alle au?er this
             foreach (var windmill in windmills)
             {
                 if (windmill == clickedWindmill)
