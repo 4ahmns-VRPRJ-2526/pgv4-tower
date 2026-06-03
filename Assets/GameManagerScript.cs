@@ -201,9 +201,7 @@ public class GameManagerScript : MonoBehaviour
 
             procentageText.text = similarity.ToString("F2") + "%";
 
-            // =========================
-            // Kreise
-            // =========================
+
 
             compareLeftHalf.color = new Color(
                 _goalColour.r,
@@ -219,25 +217,19 @@ public class GameManagerScript : MonoBehaviour
                 1f
             );
 
-            // =========================
-            // RGB Werte Ziel
-            // =========================
+
 
             int goalR = Mathf.RoundToInt(_goalColour.r * 255);
             int goalG = Mathf.RoundToInt(_goalColour.g * 255);
             int goalB = Mathf.RoundToInt(_goalColour.b * 255);
 
-            // =========================
-            // RGB Werte Mix
-            // =========================
+
 
             int mixR = Mathf.RoundToInt(mixed.r * 255);
             int mixG = Mathf.RoundToInt(mixed.g * 255);
             int mixB = Mathf.RoundToInt(mixed.b * 255);
 
-            // =========================
-            // Texte setzen
-            // =========================
+
 
             goalRText.text = goalR.ToString();
             goalGText.text = goalG.ToString();
@@ -247,9 +239,8 @@ public class GameManagerScript : MonoBehaviour
             mixGText.text = mixG.ToString();
             mixBText.text = mixB.ToString();
 
-            // =========================
-            // Balken füllen
-            // =========================
+
+
 
             goalRBar.fillAmount = goalR / 255f;
             goalGBar.fillAmount = goalG / 255f;
@@ -259,7 +250,7 @@ public class GameManagerScript : MonoBehaviour
             mixGBar.fillAmount = mixG / 255f;
             mixBBar.fillAmount = mixB / 255f;
 
-            // Farben der Balken
+
             goalRBar.color = Color.red;
             goalGBar.color = Color.green;
             goalBBar.color = Color.blue;
@@ -289,7 +280,7 @@ public class GameManagerScript : MonoBehaviour
 
     float GetColorSimilarityPercentage(Color a, Color b)
     {
-        // RGB Werte von 0–1 auf 0–255 umrechnen
+
         float r1 = a.r * 255f;
         float g1 = a.g * 255f;
         float b1 = a.b * 255f;
@@ -298,29 +289,27 @@ public class GameManagerScript : MonoBehaviour
         float g2 = b.g * 255f;
         float b2 = b.b * 255f;
 
-        // Differenzen berechnen
         float rDiff = r1 - r2;
         float gDiff = g1 - g2;
         float bDiff = b1 - b2;
 
-        // Euklidische Distanz
         float distance = Mathf.Sqrt(
             rDiff * rDiff +
             gDiff * gDiff +
             bDiff * bDiff
         );
 
-        // Maximale RGB Distanz
+
         float maxDistance = Mathf.Sqrt(
             255f * 255f +
             255f * 255f +
             255f * 255f
         );
 
-        // Ähnlichkeit berechnen
+
         float similarity = 1f - (distance / maxDistance);
 
-        // Prozent zurückgeben
+
         return Mathf.Clamp(
             (float)System.Math.Round(similarity * 100f, 2),
             0f,
