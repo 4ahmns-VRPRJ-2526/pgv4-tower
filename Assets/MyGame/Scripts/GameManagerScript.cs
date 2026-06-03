@@ -17,19 +17,25 @@ public class GameManagerScript : MonoBehaviour
 
     [Header("Colour")]
     public GameObject colourCanvas;
+    public GameObject colourCanvasLandscape;
     public Color _goalColour;
     public Color[] _colorsArray;
 
     [Header("RandomName")]
     public GameObject randomNameCanvas;
+    public GameObject randomNameCanvasLandscape;
     public string randomName;
     public TMP_Text randomNameText;
+    public TMP_Text randomNameTextLandscape;
     public TMP_Text GenerationsLeftText;
+    public TMP_Text GenerationsLeftTextLandscape;
     private int numberOfNameGenerations;
     private int numberOfGenerationsLeft;
     public int numberOfNameGenerationsIsLimitedTo = 3;
     public Button generateNameButton;
     public Button chooseNameButton;
+    public Button generateNameButtonLandscape;
+    public Button chooseNameButtonLandscape;
 
     // NEU: Text oben im Color Selection Menu
     public TMP_Text colorMenuNameText;
@@ -37,6 +43,7 @@ public class GameManagerScript : MonoBehaviour
     public Animator ghostAnimator;
     public WindmillManager wma;
     public GameObject textCanvas;
+    public GameObject textCanvasLandscape;
     AnimatorStateInfo stateInfo;
     private bool hasShownText = false;
 
@@ -51,28 +58,54 @@ public class GameManagerScript : MonoBehaviour
     public GameObject finishedGameCanvas;
 
     bool alreadyPulled = false;
+    public int resolutionWidth, resolutionHeight;
+    public bool screenHorizontal;
 
     // Liste der männlichen Adjektive
     private string[] adjektive = new string[]
     {
-        "verrückter", "lustiger", "komischer", "schräger", "alberner",
-        "zappeliger", "flippiger", "witziger", "seltsamer", "spaßiger"
+        "verrückter", "lustiger", "komischer", "schräger", "alberner", "zappeliger", "flippiger", "witziger", "seltsamer", "spaßiger",
+        "plumper", "lauter", "überdrehter", "durchgeknallter", "schriller", "cooler", "lässiger", "stylischer", "entspannter", "smarter",
+        "trendiger", "moderner", "souveräner", "chilliger", "lockerer", "selbstsicherer", "eleganter", "flinker", "glänzender", "wilder",
+        "starker", "mächtiger", "brutaler", "rasender", "donnernder", "explosiver", "brennender", "unaufhaltbarer", "tapferer", "mutiger",
+        "furchtloser", "heldenhafter", "krasser", "zäher", "unbesiegbarer", "robuster", "harter", "frostiger", "sonniger", "windiger",
+        "stürmischer", "erdiger", "felsiger", "nebliger", "feuriger", "wasserreicher", "dunkler", "gruseliger", "finsterer", "geisterhafter",
+        "spukhafter", "unheimlicher", "totenstiller", "schattenhafter", "kluger", "schlauer", "neugieriger", "cleverer", "tüftelnder",
+        "logischer", "grübelnder", "analytischer", "gelehrter", "nerdiger", "flauschiger", "zuckersüßer", "niedlicher", "funkelnder",
+        "kuscheliger", "fröhlicher", "glitzernder", "zarter", "hopsiger", "kulleriger", "bunter", "schimmernder", "magischer", "verträumter",
+        "freundlicher", "witzelnder", "geheimer", "mysteriöser", "unsichtbarer", "silberner", "goldener", "stahlharter", "verräterischer",
+        "leuchtender", "elektrischer", "mechanischer", "biestiger", "schlammiger", "kantiger", "schneller", "leiser", "aggressiver",
+        "geduldiger", "listiger", "gefährlicher", "selbstloser", "frecher", "verschrobener", "verwegener", "legendärer", "epischer",
+        "chaotischer", "genialer", "verpeilter", "nasser", "trockener", "blinder", "tauber", "wandelbarer", "fliegender", "tanzender",
+        "singender", "brüllender", "jagender", "zitternder", "schnarchender", "gähnender", "lachender", "weinender", "träumender"
     };
 
-    // Liste der Tiere
+    // Liste der männlichen Tiere
     private string[] tiere = new string[]
     {
-        "Löwe", "Tiger", "Bär", "Wolf", "Fuchs",
-        "Hirsch", "Eber", "Rabe", "Panther", "Adler"
+        "Löwe", "Tiger", "Bär", "Wolf", "Fuchs", "Hirsch", "Eber", "Rabe", "Panther", "Adler",
+        "Falke", "Geier", "Stier", "Hund", "Kater", "Hahn", "Pfau", "Widder", "Ziegenbock", "Dachs",
+        "Marder", "Schakal", "Igel", "Hase", "Maulwurf", "Biber", "Otter", "Affe", "Gorilla", "Orang-Utan",
+        "Schimpanse", "Elefant", "Wal", "Delphin", "Hai", "Krake", "Fisch", "Pavian", "Yak", "Kojote",
+        "Büffel", "Zebra", "Nashorn", "Elch", "Mammut", "Drache", "Greif", "Minotaurus", "Zentaur", "Werwolf",
+        "Vogel", "Pinguin", "Strauß", "Kranich", "Schwan", "Spatz", "Specht", "Uhu", "Kauz", "Kondor",
+        "Luchs", "Wiesel", "Frettchen", "Kaninchen", "Kamel", "Esel", "Pony", "Ochse", "Rind", "Maultier",
+        "Frosch", "Kröterich", "Molch", "Leguan", "Iltis", "Käfer", "Skorpion", "Marienkäfer", "Schmetterling",
+        "Käuzchen", "Rüsselkäfer"
     };
 
     void Start()
     {
         numberOfNameGenerations = 0;
         numberOfGenerationsLeft = numberOfNameGenerationsIsLimitedTo;
-        GenerationsLeftText.text = numberOfGenerationsLeft.ToString();
+        UpdateGenerationTexts();
+        SetChooseButtons(false);
 
         randomNameCanvas.SetActive(false);
+        if (randomNameCanvasLandscape != null)
+        {
+            randomNameCanvasLandscape.SetActive(false);
+        }
 
         if (Display.displays.Length > 1)
         {
@@ -101,16 +134,28 @@ public class GameManagerScript : MonoBehaviour
             ui.interactable = false;
         }
 
-        // NEU: Name am Anfang unsichtbar machen
         if (colorMenuNameText != null)
         {
             colorMenuNameText.text = "";
         }
     }
 
+    public bool ItIsHorizontal()
+    {
+        resolutionWidth = Screen.width;
+        resolutionHeight = Screen.height;
+        return resolutionWidth > 1080;
+    }
+
     public void ActivateRandomName()
     {
-        randomNameCanvas.SetActive(true);
+        bool horizontal = ItIsHorizontal();
+        randomNameCanvas.SetActive(!horizontal);
+
+        if (randomNameCanvasLandscape != null)
+        {
+            randomNameCanvasLandscape.SetActive(horizontal);
+        }
 
         GameObject callerx = EventSystem.current.currentSelectedGameObject;
 
@@ -125,32 +170,24 @@ public class GameManagerScript : MonoBehaviour
         if (numberOfNameGenerations < numberOfNameGenerationsIsLimitedTo)
         {
             randomName = adjektive[Random.Range(0, adjektive.Length)] + " " + tiere[Random.Range(0, tiere.Length)];
-            randomNameText.text = randomName;
+            SetRandomNameTexts(randomName);
 
             numberOfNameGenerations += 1;
-
             numberOfGenerationsLeft = numberOfNameGenerationsIsLimitedTo - numberOfNameGenerations;
-            GenerationsLeftText.text = numberOfGenerationsLeft.ToString();
+            UpdateGenerationTexts();
         }
 
         if (numberOfNameGenerations >= numberOfNameGenerationsIsLimitedTo)
         {
-            generateNameButton.interactable = false;
+            SetGenerateButtons(false);
         }
 
-        if (numberOfNameGenerations > 0 && randomNameText.text != null)
-        {
-            chooseNameButton.interactable = true;
-        }
-        else
-        {
-            chooseNameButton.interactable = false;
-        }
+        SetChooseButtons(numberOfNameGenerations > 0 && !string.IsNullOrEmpty(randomName));
     }
 
     public void ChooseThisName()
     {
-        if (numberOfNameGenerations > 0 && randomNameText.text != null) // das if statement ist nicht unbedingt notwendig, da der Button nicht interactable ist, wenn dieses if nicht erfüllt ist
+        if (numberOfNameGenerations > 0 && !string.IsNullOrEmpty(randomName))
         {
             if (colorMenuNameText != null)
             {
@@ -158,12 +195,25 @@ public class GameManagerScript : MonoBehaviour
             }
 
             randomNameCanvas.SetActive(false);
+
+            if (randomNameCanvasLandscape != null)
+            {
+                randomNameCanvasLandscape.SetActive(false);
+            }
+
             ActivateCoulorCanvas();
         }
     }
+
     public void ActivateCoulorCanvas()
     {
-        colourCanvas.SetActive(true);
+        bool horizontal = ItIsHorizontal();
+        colourCanvas.SetActive(!horizontal);
+
+        if (colourCanvasLandscape != null)
+        {
+            colourCanvasLandscape.SetActive(horizontal);
+        }
     }
 
     public void SelectColorGoal(int a)
@@ -191,8 +241,15 @@ public class GameManagerScript : MonoBehaviour
 
         colourCanvas.SetActive(false);
 
-        // NEU: Namen verstecken wenn Canvas geschlossen wird
-        colorMenuNameText.text = "";
+        if (colourCanvasLandscape != null)
+        {
+            colourCanvasLandscape.SetActive(false);
+        }
+
+        if (colorMenuNameText != null)
+        {
+            colorMenuNameText.text = "";
+        }
 
         _goalColour = _colorsArray[a];
     }
@@ -207,10 +264,16 @@ public class GameManagerScript : MonoBehaviour
                 stateInfo.IsName("Anim2") &&
                 stateInfo.normalizedTime >= 1.0f)
             {
-                textCanvas.SetActive(true);
+                if (ItIsHorizontal() && textCanvasLandscape != null)
+                {
+                    textCanvasLandscape.SetActive(true);
+                }
+                else
+                {
+                    textCanvas.SetActive(true);
+                }
 
                 StartCoroutine(TextWait());
-
                 hasShownText = true;
             }
         }
@@ -247,14 +310,11 @@ public class GameManagerScript : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Q))
         {
 #if UNITY_EDITOR
-            
             UnityEditor.EditorApplication.isPlaying = false;
 #else
-            // Beendet die Anwendung im Build
             Application.Quit();
 #endif
         }
-
     }
 
     public IEnumerator WaitTime()
@@ -262,6 +322,11 @@ public class GameManagerScript : MonoBehaviour
         yield return new WaitForSeconds(2);
 
         randomNameCanvas.SetActive(false);
+
+        if (randomNameCanvasLandscape != null)
+        {
+            randomNameCanvasLandscape.SetActive(false);
+        }
 
         ActivateCoulorCanvas();
     }
@@ -271,6 +336,11 @@ public class GameManagerScript : MonoBehaviour
         yield return new WaitForSeconds(15);
 
         textCanvas.SetActive(false);
+
+        if (textCanvasLandscape != null)
+        {
+            textCanvasLandscape.SetActive(false);
+        }
     }
 
     float GetColorSimilarityPercentage(Color a, Color b)
@@ -291,5 +361,55 @@ public class GameManagerScript : MonoBehaviour
             100f
         );
     }
-    
+
+    private void SetRandomNameTexts(string value)
+    {
+        randomNameText.text = value;
+
+        if (randomNameTextLandscape != null)
+        {
+            randomNameTextLandscape.text = value;
+        }
+    }
+
+    private void UpdateGenerationTexts()
+    {
+        string value = numberOfGenerationsLeft.ToString();
+
+        if (GenerationsLeftText != null)
+        {
+            GenerationsLeftText.text = value;
+        }
+
+        if (GenerationsLeftTextLandscape != null)
+        {
+            GenerationsLeftTextLandscape.text = value;
+        }
+    }
+
+    private void SetGenerateButtons(bool interactable)
+    {
+        if (generateNameButton != null)
+        {
+            generateNameButton.interactable = interactable;
+        }
+
+        if (generateNameButtonLandscape != null)
+        {
+            generateNameButtonLandscape.interactable = interactable;
+        }
+    }
+
+    private void SetChooseButtons(bool interactable)
+    {
+        if (chooseNameButton != null)
+        {
+            chooseNameButton.interactable = interactable;
+        }
+
+        if (chooseNameButtonLandscape != null)
+        {
+            chooseNameButtonLandscape.interactable = interactable;
+        }
+    }
 }
