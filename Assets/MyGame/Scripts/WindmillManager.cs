@@ -1,11 +1,18 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using Unity.VisualScripting;
+using UnityEditor.Experimental.GraphView;
 
 public class WindmillManager : MonoBehaviour
 {
+    public int resolutionWidth, resolutionHeight;
+   
     [SerializeField] Windmill[] windmills;
     [SerializeField] GameObject _wallGoal;
+    [SerializeField] GameObject landscapeObjs;
+    [SerializeField] GameObject verticalStartCanvas;
+    [SerializeField] GameObject horizontalStartCanvas;
 
 
     private GameManagerScript _cgsa;
@@ -22,7 +29,16 @@ public class WindmillManager : MonoBehaviour
 
     private void Start()
     {
-        particlesTop.enableEmission = false;
+        resolutionWidth = Screen.width;
+        resolutionHeight = Screen.height;
+
+        if (resolutionWidth > 1080)
+        {
+            horizontalStartCanvas.SetActive(true);
+        }
+        else { verticalStartCanvas.SetActive(true); }
+
+            particlesTop.enableEmission = false;
         _cgsa = GameObject.FindObjectOfType<GameManagerScript>();
 
 

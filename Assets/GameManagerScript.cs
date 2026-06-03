@@ -17,17 +17,21 @@ public class GameManagerScript : MonoBehaviour
 
     [Header("Colour")]
     public GameObject colourCanvas;
+    public GameObject colourCanvasLandscape;
     public Color _goalColour;
     public Color[] _colorsArray;
 
     [Header("RandomName")]
     public GameObject randomNameCanvas;
+    public GameObject randomNameCanvasLandscape;
     public string randomName;
     public TMP_Text randomNameText;
+    public TMP_Text randomNameTextLandscape;
 
     public Animator ghostAnimator;
     public WindmillManager wma;
     public GameObject textCanvas;
+    public GameObject textCanvasLandscape;
     AnimatorStateInfo stateInfo;
     private bool hasShownText = false;
     [SerializeField] GameObject goalSphere;
@@ -37,8 +41,8 @@ public class GameManagerScript : MonoBehaviour
     [SerializeField] TMP_Text procentageText;
     public GameObject finishedGameCanvas;
     bool alreadyPulled = false;
-
-
+    public int resolutionWidth, resolutionHeight;
+    public bool screenHorizontal;
 
     // Liste der männlichen Adjektive
     private string[] adjektive = new string[]
@@ -100,9 +104,32 @@ public class GameManagerScript : MonoBehaviour
 
     }
 
+    public bool ItIsHorizontal()
+    {
+        resolutionWidth = Screen.width;
+        resolutionHeight = Screen.height;
+
+        if (resolutionWidth > 1080)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
     public void ActivateRandomName()
     {
-        randomNameCanvas.SetActive(true);
+        if (ItIsHorizontal())
+        { 
+            randomNameCanvas.SetActive(false);
+            randomNameCanvasLandscape.SetActive(true);
+        }
+        else
+        {
+            randomNameCanvas.SetActive(true);
+            randomNameCanvasLandscape.SetActive(false);
+        }
+        
         GameObject callerx = EventSystem.current.currentSelectedGameObject;
         if (callerx != null)
         {
@@ -116,12 +143,29 @@ public class GameManagerScript : MonoBehaviour
     public void ChooseRandomName()
     {
         randomName = adjektive[Random.Range(0, adjektive.Length)] + " " + tiere[Random.Range(0, tiere.Length)];
-        randomNameText.text = randomName;
+        if (ItIsHorizontal())
+        {
+            randomNameTextLandscape.text = randomName; 
+        }
+        else
+        {
+            randomNameText.text = randomName;
+        }
+           
         StartCoroutine(WaitTime());
     }
     public void ActivateCoulorCanvas()
     {
-        colourCanvas.SetActive(true);
+        if (ItIsHorizontal())
+        {
+            colourCanvas.SetActive(false);
+            colourCanvasLandscape.SetActive(true);
+        }
+        else
+        {
+            colourCanvas.SetActive(true);
+            colourCanvasLandscape.SetActive(false);
+        }
 
     }
 
@@ -143,7 +187,7 @@ public class GameManagerScript : MonoBehaviour
         {
             ui.interactable = true;
         }
-
+        colourCanvasLandscape.SetActive(false);
         colourCanvas.SetActive(false);
 
         _goalColour = _colorsArray[a];
@@ -156,7 +200,14 @@ public class GameManagerScript : MonoBehaviour
             stateInfo = ghostAnimator.GetCurrentAnimatorStateInfo(0);
             if (!hasShownText && stateInfo.IsName("Anim2") && stateInfo.normalizedTime >= 1.0f)
             {
-                textCanvas.SetActive(true);
+                if (ItIsHorizontal())
+                {
+                    textCanvasLandscape.SetActive(true);
+                }
+                else
+                {
+                    textCanvas.SetActive(true);
+                }
                 StartCoroutine(TextWait());
                 hasShownText = true;
             }
@@ -184,6 +235,7 @@ public class GameManagerScript : MonoBehaviour
     {
         yield return new WaitForSeconds(2);
         randomNameCanvas.SetActive(false);
+        randomNameCanvasLandscape.SetActive(false);
         ActivateCoulorCanvas();
     }
 
