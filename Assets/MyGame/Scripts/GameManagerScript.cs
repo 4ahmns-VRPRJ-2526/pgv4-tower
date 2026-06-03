@@ -39,6 +39,7 @@ public class GameManagerScript : MonoBehaviour
 
     // NEU: Text oben im Color Selection Menu
     public TMP_Text colorMenuNameText;
+    public TMP_Text colorMenuNameTextLandscape;
 
     public Animator ghostAnimator;
     public WindmillManager wma;
@@ -134,10 +135,7 @@ public class GameManagerScript : MonoBehaviour
             ui.interactable = false;
         }
 
-        if (colorMenuNameText != null)
-        {
-            colorMenuNameText.text = "";
-        }
+        SetColorMenuNameTexts("");
     }
 
     public bool ItIsHorizontal()
@@ -189,10 +187,7 @@ public class GameManagerScript : MonoBehaviour
     {
         if (numberOfNameGenerations > 0 && !string.IsNullOrEmpty(randomName))
         {
-            if (colorMenuNameText != null)
-            {
-                colorMenuNameText.text = randomName + ",";
-            }
+            SetColorMenuNameTexts(randomName + ",");
 
             randomNameCanvas.SetActive(false);
 
@@ -246,10 +241,7 @@ public class GameManagerScript : MonoBehaviour
             colourCanvasLandscape.SetActive(false);
         }
 
-        if (colorMenuNameText != null)
-        {
-            colorMenuNameText.text = "";
-        }
+        SetColorMenuNameTexts("");
 
         _goalColour = _colorsArray[a];
     }
@@ -410,6 +402,19 @@ public class GameManagerScript : MonoBehaviour
         if (chooseNameButtonLandscape != null)
         {
             chooseNameButtonLandscape.interactable = interactable;
+        }
+    }
+
+    private void SetColorMenuNameTexts(string value)
+    {
+        if (colorMenuNameText != null)
+        {
+            colorMenuNameText.text = value;
+        }
+
+        if (colorMenuNameTextLandscape != null)
+        {
+            colorMenuNameTextLandscape.text = value;
         }
     }
 }
