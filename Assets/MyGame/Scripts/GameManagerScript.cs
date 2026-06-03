@@ -259,10 +259,12 @@ public class GameManagerScript : MonoBehaviour
                 if (ItIsHorizontal() && textCanvasLandscape != null)
                 {
                     textCanvasLandscape.SetActive(true);
+                    EnsureInfoTextButton(textCanvasLandscape);
                 }
                 else
                 {
                     textCanvas.SetActive(true);
+                    EnsureInfoTextButton(textCanvas);
                 }
 
                 StartCoroutine(TextWait());
@@ -327,6 +329,16 @@ public class GameManagerScript : MonoBehaviour
     {
         yield return new WaitForSeconds(15);
 
+        textCanvas.SetActive(false);
+
+        if (textCanvasLandscape != null)
+        {
+            textCanvasLandscape.SetActive(false);
+        }
+    }
+
+    public void DisableInfoText()
+    {
         textCanvas.SetActive(false);
 
         if (textCanvasLandscape != null)
@@ -416,5 +428,74 @@ public class GameManagerScript : MonoBehaviour
         {
             colorMenuNameTextLandscape.text = value;
         }
+    }
+
+    private void EnsureInfoTextButton(GameObject parentCanvas)
+    {
+        if (parentCanvas == null)
+        {
+            return;
+        }
+
+        Transform existingButton = parentCanvas.transform.Find("InfoTextButton");
+        GameObject buttonObject = existingButton != null
+            ? existingButton.gameObject
+            : new GameObject("InfoTextButton", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(Button));
+
+        buttonObject.transform.SetParent(parentCanvas.transform, false);
+
+        RectTransform buttonRect = buttonObject.GetComponent<RectTransform>();
+        buttonRect.anchorMin = new Vector2(0.5f, 0.5f);
+        buttonRect.anchorMax = new Vector2(0.5f, 0.5f);
+        buttonRect.pivot = new Vector2(0.5f, 0.5f);
+        buttonRect.anchoredPosition = ItIsHorizontal() ? new Vector2(40f, -480f) : new Vector2(40f, -870f);
+        buttonRect.sizeDelta = new Vector2(70f, 60f);
+
+        Image buttonImage = buttonObject.GetComponent<Image>();
+        if (buttonImage == null)
+        {
+            buttonImage = buttonObject.AddComponent<Image>();
+        }
+
+        buttonImage.color = Color.white;
+
+        Button button = buttonObject.GetComponent<Button>();
+        if (button == null)
+        {
+            button = buttonObject.AddComponent<Button>();
+        }
+
+        button.onClick.RemoveListener(DisableInfoText);
+        button.onClick.AddListener(DisableInfoText);
+
+        Text oldText = buttonObject.GetComponentInChildren<Text>();
+        if (oldText != null)
+        {
+            Destroy(oldText.gameObject);
+        }
+
+        Transform existingCheckmark = buttonObject.transform.Find("Checkmark");
+        GameObject textObject = existingCheckmark != null
+            ? existingCheckmark.gameObject
+            : new GameObject("Checkmark", typeof(RectTransform), typeof(CanvasRenderer), typeof(TextMeshProUGUI));
+
+        textObject.transform.SetParent(buttonObject.transform, false);
+
+        RectTransform textRect = textObject.GetComponent<RectTransform>();
+        textRect.anchorMin = Vector2.zero;
+        textRect.anchorMax = Vector2.one;
+        textRect.offsetMin = Vector2.zero;
+        textRect.offsetMax = Vector2.zero;
+
+        TextMeshProUGUI checkmarkText = textObject.GetComponent<TextMeshProUGUI>();
+        if (checkmarkText == null)
+        {
+            checkmarkText = textObject.AddComponent<TextMeshProUGUI>();
+        }
+
+        checkmarkText.text = "\u2714";
+        checkmarkText.fontSize = 42;
+        checkmarkText.alignment = TextAlignmentOptions.Center;
+        checkmarkText.color = new Color(0f, 0.82f, 0.03f, 1f);
     }
 }
