@@ -38,6 +38,9 @@ public class GameManagerScript : MonoBehaviour
     public GameObject finishedGameCanvas;
     bool alreadyPulled = false;
 
+    [Header("SelectedColor")]
+    public Image selectedColorEmpty;
+
 
 
     // Liste der männlichen Adjektive
@@ -127,27 +130,40 @@ public class GameManagerScript : MonoBehaviour
 
     public void SelectColorGoal(int a)
     {
-        ghostAnimator.SetTrigger("TrigGhost");
-        wma.particlesTop.enableEmission = true;
-        foreach (GameObject obj in objectsWithScripts)
-        {
-            MonoBehaviour[] scripts = obj.GetComponents<MonoBehaviour>();
-            foreach (MonoBehaviour script in scripts)
+            // Sprite vom angeklickten Button übernehmen
+            GameObject caller = EventSystem.current.currentSelectedGameObject;
+
+            if (caller != null)
             {
-                if (script == this) continue; //failsafe wenn Script is Self
-                script.enabled = true;
+                Image buttonImage = caller.GetComponent<Image>();
+
+                if (buttonImage != null)
+                {
+                    selectedColorEmpty.sprite = buttonImage.sprite;
+                    selectedColorEmpty.preserveAspect = true;
+                }
             }
-        }
 
-        foreach (Selectable ui in uiElementsToDisable)
-        {
-            ui.interactable = true;
-        }
+            ghostAnimator.SetTrigger("TrigGhost");
+            wma.particlesTop.enableEmission = true;
 
-        colourCanvas.SetActive(false);
+            foreach (GameObject obj in objectsWithScripts)
+            {
+                MonoBehaviour[] scripts = obj.GetComponents<MonoBehaviour>();
+                foreach (MonoBehaviour script in scripts)
+                {
+                    if (script == this) continue;
+                    script.enabled = true;
+                }
+            }
 
-        _goalColour = _colorsArray[a];
+            foreach (Selectable ui in uiElementsToDisable)
+            {
+                ui.interactable = true;
+            }
 
+            colourCanvas.SetActive(false);
+            _goalColour = _colorsArray[a];
     }
     void Update()
     {
@@ -205,5 +221,6 @@ public class GameManagerScript : MonoBehaviour
         return Mathf.Clamp((float)System.Math.Round(knappheit * 100f, 2), 0f, 100f);
 
     }
+
 }
 
