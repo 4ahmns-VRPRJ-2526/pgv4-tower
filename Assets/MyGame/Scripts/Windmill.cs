@@ -13,6 +13,8 @@ public class Windmill : MonoBehaviour
     [SerializeField] private Slider speedSlider;
     [SerializeField] private TMP_Text lockedText;
     [SerializeField] private AudioSource windmillEngine;
+    [SerializeField] private StartSoundScript SoundScript;
+    
 
     [SerializeField] public bool isWindmillSelected = false;
     private const float MAX_LIGHT_INTENSITY = 5f; //höherer Wert für mehr Intensität
@@ -51,7 +53,12 @@ public class Windmill : MonoBehaviour
         {
             rotor.RotateRotor(true);
             AnimatePulse();
-            windmillEngine.Play();
+            
+            if (SoundScript.enabled == false) 
+            {
+                SoundScript.enabled = true;
+            }
+            
         }
         else
         {
@@ -60,6 +67,10 @@ public class Windmill : MonoBehaviour
             if (IsWindmillLocked())
             {
                 ShowHideWindmill(false);
+            }
+            if (SoundScript.enabled == true) 
+            {
+                SoundScript.enabled = false;
             }
 
             ResetScale();
@@ -142,6 +153,9 @@ public class Windmill : MonoBehaviour
             lampLight.enabled = true;
             ShowHideWindmill(true);
         }
+
+        
+
     }
 
     public void ResetWindmill()

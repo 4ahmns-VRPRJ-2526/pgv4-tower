@@ -2382,6 +2382,8 @@ GameObject:
   - component: {fileID: 240367976}
   - component: {fileID: 240367977}
   - component: {fileID: 240367978}
+  - component: {fileID: 240367979}
+  - component: {fileID: 240367980}
   m_Layer: 0
   m_Name: Windmill- Green
   m_TagString: Untagged
@@ -2432,6 +2434,7 @@ MonoBehaviour:
   speedSlider: {fileID: 1270943531}
   lockedText: {fileID: 1045730816}
   windmillEngine: {fileID: 240367978}
+  SoundScript: {fileID: 240367980}
   isWindmillSelected: 0
   pulseSpeed: 2
   pulseMagnitude: 0.05
@@ -2448,7 +2451,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: 6d68c3fcbee8db0488cd47144c9b300c, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -2532,6 +2535,119 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!82 &240367979
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 240367975}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 8300000, guid: f5072eddbdbfeae48a8ec2bcf2b6137e, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!114 &240367980
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 240367975}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8177e1cb9173e7d49a74e58301007202, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioSource: {fileID: 240367979}
+  maxVolume: 1
+  fadeInSpeed: 0.5
+  fadeOutSpeed: 0.5
 --- !u!1 &245899102
 GameObject:
   m_ObjectHideFlags: 0
@@ -17503,6 +17619,8 @@ GameObject:
   - component: {fileID: 1556504147}
   - component: {fileID: 1556504145}
   - component: {fileID: 1556504146}
+  - component: {fileID: 1556504148}
+  - component: {fileID: 1556504149}
   m_Layer: 0
   m_Name: Windmill- Blue
   m_TagString: Untagged
@@ -17528,6 +17646,7 @@ MonoBehaviour:
   speedSlider: {fileID: 676336786}
   lockedText: {fileID: 1979738272}
   windmillEngine: {fileID: 1556504146}
+  SoundScript: {fileID: 1556504149}
   isWindmillSelected: 0
   pulseSpeed: 2
   pulseMagnitude: 0.05
@@ -17544,7 +17663,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: 6d68c3fcbee8db0488cd47144c9b300c, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -17653,6 +17772,119 @@ Transform:
   - {fileID: 801585987}
   m_Father: {fileID: 347229819}
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+--- !u!82 &1556504148
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1556504144}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 8300000, guid: 1fcc6bf2de76d2a4595ff27837ae3c84, type: 3}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!114 &1556504149
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1556504144}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8177e1cb9173e7d49a74e58301007202, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioSource: {fileID: 1556504148}
+  maxVolume: 1
+  fadeInSpeed: 0.5
+  fadeOutSpeed: 0.5
 --- !u!1 &1557317908
 GameObject:
   m_ObjectHideFlags: 0
@@ -35340,7 +35572,8 @@ GameObject:
   m_Component:
   - component: {fileID: 5312381281576512286}
   - component: {fileID: 8771091787833189151}
-  - component: {fileID: 8771091787833189150}
+  - component: {fileID: 8771091787833189152}
+  - component: {fileID: 8771091787833189153}
   m_Layer: 0
   m_Name: Windmill-Red
   m_TagString: Untagged
@@ -35348,7 +35581,29 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!82 &8771091787833189150
+--- !u!114 &8771091787833189151
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8771091787833189149}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4cec40f299ccd8348841c76c7f91b472, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  color: 0
+  rotor: {fileID: 7267990793424862882}
+  lampLight: {fileID: 497474862}
+  speedSlider: {fileID: 591714751}
+  lockedText: {fileID: 1379041566}
+  windmillEngine: {fileID: 0}
+  SoundScript: {fileID: 8771091787833189153}
+  isWindmillSelected: 0
+  pulseSpeed: 2
+  pulseMagnitude: 0.05
+--- !u!82 &8771091787833189152
 AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -35359,11 +35614,11 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 8300000, guid: 6d68c3fcbee8db0488cd47144c9b300c, type: 3}
+  m_Resource: {fileID: 8300000, guid: 1cf8fdb2d0456534ba69786292b41163, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
-  Loop: 1
+  Loop: 0
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -35445,27 +35700,22 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &8771091787833189151
+--- !u!114 &8771091787833189153
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8771091787833189149}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4cec40f299ccd8348841c76c7f91b472, type: 3}
+  m_Script: {fileID: 11500000, guid: 8177e1cb9173e7d49a74e58301007202, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  color: 0
-  rotor: {fileID: 7267990793424862882}
-  lampLight: {fileID: 497474862}
-  speedSlider: {fileID: 591714751}
-  lockedText: {fileID: 1379041566}
-  windmillEngine: {fileID: 8771091787833189150}
-  isWindmillSelected: 0
-  pulseSpeed: 2
-  pulseMagnitude: 0.05
+  audioSource: {fileID: 8771091787833189152}
+  maxVolume: 1
+  fadeInSpeed: 0.5
+  fadeOutSpeed: 0.5
 --- !u!1 &8771091787937502954
 GameObject:
   m_ObjectHideFlags: 0

@@ -10,7 +10,7 @@ public class RotorHub : MonoBehaviour
 
     public float currentSpeed = 0f; // Current rotation speed
     public float constRotationSpeed = -1f;
-
+    
 
     public void RotateRotor(bool windmillSelected)
     {
@@ -27,6 +27,8 @@ public class RotorHub : MonoBehaviour
         
         RotateAtDynamicSpeed(Input.GetKey(KeyCode.Space));
         transform.Rotate(Vector3.forward, currentSpeed * Time.deltaTime, Space.World);
+        
+
 
     }
 
