@@ -24,6 +24,12 @@ public class GameManagerScript : MonoBehaviour
     public GameObject randomNameCanvas;
     public string randomName;
     public TMP_Text randomNameText;
+    public TMP_Text GenerationsLeftText;
+    private int numberOfNameGenerations;
+    private int numberOfGenerationsLeft;
+    public int numberOfNameGenerationsIsLimitedTo = 3;
+    public Button generateNameButton;
+    public Button chooseNameButton;
 
     // NEU: Text oben im Color Selection Menu
     public TMP_Text colorMenuNameText;
@@ -46,22 +52,28 @@ public class GameManagerScript : MonoBehaviour
 
     bool alreadyPulled = false;
 
-    // Liste der m‰nnlichen Adjektive
+    // Liste der m√§nnlichen Adjektive
     private string[] adjektive = new string[]
     {
-        "verr¸ckter", "lustiger", "komischer", "schr‰ger", "alberner",
-        "zappeliger", "flippiger", "witziger", "seltsamer", "spaﬂiger"
+        "verr√ºckter", "lustiger", "komischer", "schr√§ger", "alberner",
+        "zappeliger", "flippiger", "witziger", "seltsamer", "spa√üiger"
     };
 
     // Liste der Tiere
     private string[] tiere = new string[]
     {
-        "Lˆwe", "Tiger", "B‰r", "Wolf", "Fuchs",
+        "L√∂we", "Tiger", "B√§r", "Wolf", "Fuchs",
         "Hirsch", "Eber", "Rabe", "Panther", "Adler"
     };
 
     void Start()
     {
+        numberOfNameGenerations = 0;
+        numberOfGenerationsLeft = numberOfNameGenerationsIsLimitedTo;
+        GenerationsLeftText.text = numberOfGenerationsLeft.ToString();
+
+        randomNameCanvas.SetActive(false);
+
         if (Display.displays.Length > 1)
         {
             Display.displays[1].Activate();
@@ -110,19 +122,45 @@ public class GameManagerScript : MonoBehaviour
 
     public void ChooseRandomName()
     {
-        randomName =
-            adjektive[Random.Range(0, adjektive.Length)] + " " +
-            tiere[Random.Range(0, tiere.Length)];
+        if (numberOfNameGenerations < numberOfNameGenerationsIsLimitedTo)
+        {
+            randomName = adjektive[Random.Range(0, adjektive.Length)] + " " + tiere[Random.Range(0, tiere.Length)];
+            randomNameText.text = randomName;
 
-        // Random Name Canvas Text setzen
-        randomNameText.text = randomName;
+            numberOfNameGenerations += 1;
 
-        // NEU: Gleichen Namen im Color Menu anzeigen
-        colorMenuNameText.text = randomName + ",";
+            numberOfGenerationsLeft = numberOfNameGenerationsIsLimitedTo - numberOfNameGenerations;
+            GenerationsLeftText.text = numberOfGenerationsLeft.ToString();
+        }
 
-        StartCoroutine(WaitTime());
+        if (numberOfNameGenerations >= numberOfNameGenerationsIsLimitedTo)
+        {
+            generateNameButton.interactable = false;
+        }
+
+        if (numberOfNameGenerations > 0 && randomNameText.text != null)
+        {
+            chooseNameButton.interactable = true;
+        }
+        else
+        {
+            chooseNameButton.interactable = false;
+        }
     }
 
+    public void ChooseThisName()
+    {
+        if (numberOfNameGenerations > 0 && randomNameText.text != null) // das if statement ist nicht unbedingt notwendig, da der Button nicht interactable ist, wenn dieses if nicht erf√ºllt ist
+        {
+            if (colorMenuNameText != null)
+            {
+                colorMenuNameText.text = randomName + ",";
+            }
+
+            randomNameCanvas.SetActive(false);
+            ActivateCoulorCanvas();
+        }
+    }
     public void ActivateCoulorCanvas()
     {
         colourCanvas.SetActive(true);
