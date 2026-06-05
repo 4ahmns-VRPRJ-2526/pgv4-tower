@@ -7448,6 +7448,7 @@ MonoBehaviour:
   landscapeObjs: {fileID: 165420704}
   verticalStartCanvas: {fileID: 2018634169}
   horizontalStartCanvas: {fileID: 165420704}
+  ghostController: {fileID: 8771091789268962109}
   windmillColor:
     serializedVersion: 2
     rgba: 4278190080
@@ -34315,7 +34316,7 @@ Transform:
   m_GameObject: {fileID: 8771091789268962108}
   serializedVersion: 2
   m_LocalRotation: {x: 0.07332863, y: -0.99487805, z: 0.066729784, w: 0.019690093}
-  m_LocalPosition: {x: 11.9, y: 133.2, z: -15.30007}
+  m_LocalPosition: {x: 7.32, y: -2, z: -2.64}
   m_LocalScale: {x: 0.4078, y: 0.4078, z: 0.4078}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -39931,6 +39932,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5312381282289779519}
   - component: {fileID: 1349979005}
+  - component: {fileID: 8771091789268962109}
   m_Layer: 0
   m_Name: GhostExport
   m_TagString: Untagged
@@ -39938,6 +39940,19 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &8771091789268962109
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8771091789268962108}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f20bd777e2ac1490e8d8d4ed78ed7055, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _animator: {fileID: 1349979005}
 --- !u!1 &8771091789476221589
 GameObject:
   m_ObjectHideFlags: 0

@@ -123,3 +123,22 @@ Recommended workflow:
 Die Anwendung wird über den Touchscreen bedient.
 Die Anwendung kann jederzeit mit der Taste `Q` beendet werden.
 Zusätzlich gibt es einen versteckten Touch-Bereich in der linken oberen Ecke des Bildschirms. Dieser ist speziell für den Ausstellungsbetrieb vorgesehen damit man die Anwendung über diesen Bereich ebenfalls zu jeder Zeit beenden kann. Dazu muss der Touch-Bereich mindestens 5 Sekunden lang gedrückt gehalten werden, damit eine unbeabsichtigte Beendung verhindert wird.
+
+## Project Description
+
+1.Projectgoal
+With this project, we are building an interactive game for kids to learn how
+additive color mixing (the RGB process) works in a playful way. The children have
+to mix a given target color as accurately as possible. By blowing into the
+windmills using a straw, they control the intensity of the colors Red, Green, and
+Blue coming out of each mill.
+
+2.Pepper's Ghost
+The visuals are based on the classic illusion trick called "Pepper’s Ghost". A
+hidden monitor reflects the image onto a diagonally mounted, semi-transparent pane.
+For the kids, it creates the illusion of a 3D hologram floating freely in mid-air,
+which they can interact with just by blowing.
+
+3.Use Case
+This project is designed as an interactive exhibition installation, perfect for
+things like museums, science workshops, or open house days.
