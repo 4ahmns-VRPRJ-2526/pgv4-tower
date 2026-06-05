@@ -129,6 +129,30 @@ Die Anwendung kann jederzeit mit der Taste `Q` beendet werden.
 Zusätzlich gibt es einen versteckten Touch-Bereich in der linken oberen Ecke des Bildschirms. Dieser ist speziell für den Ausstellungsbetrieb vorgesehen, um die Anwendung ebenfalls zu beenden.
 Um die Anwendung über diesen Bereich zu beenden, muss der Touch-Bereich mindestens 5 Sekunden lang gedrückt gehalten werden, damit eine unbeabsichtigte Beendung verhindert wird.
 
+## Touchscreen Operation
+
+* The application is optimized for touchscreen use.
+* All important UI elements should be easily accessible by touch.
+* Check touchscreen calibration before the presentation.
+
+## Exit without a Keyboard
+
+* Tap the touchscreen in the upper-left corner for 5 seconds.
+* A red rectangle will slowly appear, followed by an exit button.
+* Tap the button to end the game.
+
+## Full Screen/Windows Build
+
+* Start the application in fullscreen mode.
+* Use the latest Windows build for the presentation.
+* Verify screen resolution and scaling settings beforehand.
+
+## Tests before the Demonstration
+
+* Download SetUp-Instructions in GitHub.
+* Follow the instructions.
+* Test the complete application flow once before presenting.
+
 ## Project Description
 
 1.Projectgoal
