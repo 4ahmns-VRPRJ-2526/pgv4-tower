@@ -1,4 +1,4 @@
-# 3DURP-Unity6057f1-Template
+﻿# 3DURP-Unity6057f1-Template
 
 Base template for new Unity projects using the Universal Render Pipeline.
 
@@ -124,9 +124,10 @@ Recommended workflow:
 
 ## Bedienung und Beenden der Anwendung
 
-Die Anwendung wird über den Touchscreen bedient.
+Die Anwendung wird Ã¼ber den Touchscreen bedient.
 Die Anwendung kann jederzeit mit der Taste `Q` beendet werden.
-Zusätzlich gibt es einen versteckten Touch-Bereich in der linken oberen Ecke des Bildschirms. Dieser ist speziell für den Ausstellungsbetrieb vorgesehen damit man die Anwendung über diesen Bereich ebenfalls zu jeder Zeit beenden kann. Dazu muss der Touch-Bereich mindestens 5 Sekunden lang gedrückt gehalten werden, damit eine unbeabsichtigte Beendung verhindert wird.
+Zusätzlich gibt es einen versteckten Touch-Bereich in der linken oberen Ecke des Bildschirms. Dieser ist speziell für den Ausstellungsbetrieb vorgesehen, um die Anwendung ebenfalls zu beenden.
+Um die Anwendung über diesen Bereich zu beenden, muss der Touch-Bereich mindestens 5 Sekunden lang gedrückt gehalten werden, damit eine unbeabsichtigte Beendung verhindert wird.
 
 ## Project Description
 
@@ -138,7 +139,7 @@ windmills using a straw, they control the intensity of the colors Red, Green, an
 Blue coming out of each mill.
 
 2.Pepper's Ghost
-The visuals are based on the classic illusion trick called "Pepper’s Ghost". A
+The visuals are based on the classic illusion trick called "Pepperâ€™s Ghost". A
 hidden monitor reflects the image onto a diagonally mounted, semi-transparent pane.
 For the kids, it creates the illusion of a 3D hologram floating freely in mid-air,
 which they can interact with just by blowing.
