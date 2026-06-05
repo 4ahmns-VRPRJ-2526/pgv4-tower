@@ -2,7 +2,27 @@ fileFormatVersion: 2
 guid: f56699f0d210a164c98dc96d1de8671e
 ScriptedImporter:
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Dach
+    second: {fileID: 2100000, guid: 7c6852813661bc6478cdb8f448e4cdc7, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Window
+    second: {fileID: 2100000, guid: c2981c3e79f517147800f02c1c1485a8, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: henkel
+    second: {fileID: 2100000, guid: 20d4dac39c8e3124d99be8dcbaa85324, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: tower
+    second: {fileID: 2100000, guid: ce8a167301b7cb041b5dc62ff9730a7c, type: 2}
   serializedVersion: 2
   userData: 
   assetBundleName: 

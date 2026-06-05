@@ -2,7 +2,92 @@ fileFormatVersion: 2
 guid: 0de1d65536f31c54ebb866230b5117e3
 ScriptedImporter:
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: BROWN.001
+    second: {fileID: 2100000, guid: bc1e5509288d18b438e8e0352353d12e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: BROWN.002
+    second: {fileID: 2100000, guid: 19296263b54b94547ba7fa8d664899bb, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Blatt
+    second: {fileID: 2100000, guid: fda7edeebdc179448b0b8748d4211420, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: BlattKrone
+    second: {fileID: 2100000, guid: a9c0526acc6f8ba4a82cec23d48ba828, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: BlattKrone.001
+    second: {fileID: 2100000, guid: 39097c14ddcaaa547ae6e295bd5a53e8, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Dach
+    second: {fileID: 2100000, guid: a67b917947d84174b87aeca2929bf887, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: GREEN 1
+    second: {fileID: 2100000, guid: 8408bfa0958b5f4428bf50ca4b55bb7f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: GrasEinzeln
+    second: {fileID: 2100000, guid: 99f2a08e2838df040b71da1c53da85bc, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material
+    second: {fileID: 2100000, guid: 573ffc552a66ff542a4f17c0f7d6e6a9, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.003
+    second: {fileID: 2100000, guid: 7e883007637142a479215019cb79de9f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.004
+    second: {fileID: 2100000, guid: ffde436a4f1b7fa4f842666d248a0ad9, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: StammBlatttree
+    second: {fileID: 2100000, guid: 5d819f88c10ba384cafbc24706937cca, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: StammBlatttree.001
+    second: {fileID: 2100000, guid: e2b67ca5a8aaf804da242a003ce71492, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Tanne1dunkel
+    second: {fileID: 2100000, guid: 5074e579ab9ad054495a61defcfa8e6e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Tanne2hell
+    second: {fileID: 2100000, guid: 5af43acdba97bdd4b9a30c81914f0a44, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: stammtanne
+    second: {fileID: 2100000, guid: d44d233825394a041b6c84fbf90ea5eb, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: stammtanne.002
+    second: {fileID: 2100000, guid: 3aad7ff5b939bcb49bd8c5239096b0f4, type: 2}
   serializedVersion: 2
   userData: 
   assetBundleName: 

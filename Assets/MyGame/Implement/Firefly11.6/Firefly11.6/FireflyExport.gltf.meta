@@ -2,7 +2,37 @@ fileFormatVersion: 2
 guid: 49d4314ab84727440a220f70dbdb75a3
 ScriptedImporter:
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Antenne
+    second: {fileID: 2100000, guid: 418c908e2246f2a4caba3740edffbd82, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Antennenspibtzeb
+    second: {fileID: 2100000, guid: bf16c0872d0e6bb4ba90c90a560fde9f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Body
+    second: {fileID: 2100000, guid: 50bd7bfe775bf3f4482feaba7e88cf21, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Eye
+    second: {fileID: 2100000, guid: ea7eb26fd0b71744daaf4e274eb1934f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Feet
+    second: {fileID: 2100000, guid: b2196e02de8ed024fb5bf07a73bb58f2, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Wings
+    second: {fileID: 2100000, guid: 45bfcc046d45d4e4bb2e96c29334806f, type: 2}
   serializedVersion: 2
   userData: 
   assetBundleName: 

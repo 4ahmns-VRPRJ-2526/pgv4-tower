@@ -2,7 +2,52 @@ fileFormatVersion: 2
 guid: 9d10a6218b473be419c79897dc8d5923
 ScriptedImporter:
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.001
+    second: {fileID: 2100000, guid: 80499c4608c03214587064c16f7cc806, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.002
+    second: {fileID: 2100000, guid: 6dac346d8777e1648940764ccbefc297, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: arms
+    second: {fileID: 2100000, guid: 40e15f78e2d062d4192d257f17fd2efd, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: bodygrad
+    second: {fileID: 2100000, guid: e322c1f3d5b97cf4cb286da3b52f4ec4, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: hat
+    second: {fileID: 2100000, guid: 627edf06a19adf04e8ec789880badba6, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: kopf
+    second: {fileID: 2100000, guid: b6cf1ccf53346524d88f2727b561aa10, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: nase
+    second: {fileID: 2100000, guid: 89a152f1098f7f546b16733f01ae1924, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: wooden_lantern_01
+    second: {fileID: 2100000, guid: 714037c7abd64b846b3a2224d3564148, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: wooden_lantern_01_glass
+    second: {fileID: 2100000, guid: bbef4d19591fa1340bd11b280da09aa8, type: 2}
   serializedVersion: 2
   userData: 
   assetBundleName: 
