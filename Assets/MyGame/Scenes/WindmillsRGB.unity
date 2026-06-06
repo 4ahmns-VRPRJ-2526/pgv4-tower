@@ -9415,6 +9415,20 @@ MonoBehaviour:
   goalSphereParent: {fileID: 455215896}
   achievedSphereParent: {fileID: 1341445033}
   procentageText: {fileID: 423842640}
+  goalColorImage: {fileID: 1461885163}
+  mixedColorImage: {fileID: 194715811}
+  goalRText: {fileID: 812623900}
+  goalGText: {fileID: 649095101}
+  goalBText: {fileID: 1879908293}
+  mixedRText: {fileID: 1645879207}
+  mixedGText: {fileID: 1671346919}
+  mixedBText: {fileID: 1468022118}
+  goalRBar: {fileID: 898880011}
+  goalGBar: {fileID: 587529543}
+  goalBBar: {fileID: 1922821063}
+  mixedRBar: {fileID: 1073331034}
+  mixedGBar: {fileID: 441551384}
+  mixedBBar: {fileID: 45776519}
   finishedGameCanvas: {fileID: 1293708962}
   resolutionWidth: 0
   resolutionHeight: 0

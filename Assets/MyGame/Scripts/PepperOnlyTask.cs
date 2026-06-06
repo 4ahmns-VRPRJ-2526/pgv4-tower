@@ -43,37 +43,29 @@ public class PepperOnlyTask : MonoBehaviour
         targetSprite = peppersGhostData.GetTargetSprite(targetTask);
     }
 
-    private int CalculatePoints(float euclidDistance)
+    private int CalculatePoints(float matchPercent)
     {
-        int points = -1;
-
-        //Die Farben sind komplett identisch.
-        if (euclidDistance >= 0 && euclidDistance <= 10)
+        if (matchPercent >= 90f)
         {
-            points = 4;
-        }
-        //Ähnlich, fast nicht zu unterscheiden.
-        else if (euclidDistance >= 11 && euclidDistance <= 40)
-        {
-            points = 3;
-        }
-        //Ähnlich, aber erkennbar unterschiedlich
-        else if (euclidDistance >= 41 && euclidDistance <= 100)
-        {
-            points = 2;
-        }
-        //Ziemlich unterschiedlich
-        else if (euclidDistance >= 101 && euclidDistance <= 200)
-        {
-            points = 1;
-        }
-        //Maximal unterschiedlich, maximale Distanz von etwa 441.67
-        else if (euclidDistance >= 201)
-        {
-            points = 0;
+            return 4;
         }
 
-        return points;
+        if (matchPercent >= 75f)
+        {
+            return 3;
+        }
+
+        if (matchPercent >= 50f)
+        {
+            return 2;
+        }
+
+        if (matchPercent >= 20f)
+        {
+            return 1;
+        }
+
+        return 0;
     }
 
     public void  CalcPoints()
@@ -83,21 +75,14 @@ public class PepperOnlyTask : MonoBehaviour
 
     public int EvaluatePoints(TaskToDo cTask, Color32 mixedColor)
     {
-        int distance = (int)CalculateColorDistance(targetColor, mixedColor);
-        int points = CalculatePoints(distance);
+        float matchPercent = CalculateColorMatchPercent(targetColor, mixedColor);
+        int points = CalculatePoints(matchPercent);
         return points;
     }
 
-    public float CalculateColorDistance(Color32 color1, Color32 color2)
+    public float CalculateColorMatchPercent(Color32 target, Color32 current)
     {
-        // Differenzen der Farbkanäle
-        int rDifference = color2.r - color1.r;
-        int gDifference = color2.g - color1.g;
-        int bDifference = color2.b - color1.b;
-
-        // Euklidische Distanz berechnen
-        float euclidDistance = Mathf.Sqrt(rDifference * rDifference + gDifference * gDifference + bDifference * bDifference);
-
-        return euclidDistance;
+        return ColorMatchUtility.CalculatePerceptualMatchPercent(current, target);
     }
 }
+

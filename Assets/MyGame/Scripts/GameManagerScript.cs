@@ -56,6 +56,22 @@ public class GameManagerScript : MonoBehaviour
 
     [SerializeField] TMP_Text procentageText;
 
+    [Header("Finished Game Feedback")]
+    [SerializeField] Image goalColorImage;
+    [SerializeField] Image mixedColorImage;
+    [SerializeField] TMP_Text goalRText;
+    [SerializeField] TMP_Text goalGText;
+    [SerializeField] TMP_Text goalBText;
+    [SerializeField] TMP_Text mixedRText;
+    [SerializeField] TMP_Text mixedGText;
+    [SerializeField] TMP_Text mixedBText;
+    [SerializeField] Image goalRBar;
+    [SerializeField] Image goalGBar;
+    [SerializeField] Image goalBBar;
+    [SerializeField] Image mixedRBar;
+    [SerializeField] Image mixedGBar;
+    [SerializeField] Image mixedBBar;
+
     public GameObject finishedGameCanvas;
 
     bool alreadyPulled = false;
@@ -281,18 +297,18 @@ public class GameManagerScript : MonoBehaviour
 
             alreadyPulled = true;
 
-            float similarity =
-                GetColorSimilarityPercentage(
-                    _goalColour,
-                    wma.windmillColor
-                );
+            Color mixedColor = wma.windmillColor;
+            float similarity = ColorMatchUtility.CalculatePerceptualMatchPercent(
+                mixedColor,
+                _goalColour
+            );
 
             goalSphere.GetComponent<Renderer>().material.color = _goalColour;
 
             achievedSphere.GetComponent<Renderer>().material.color =
-                wma.windmillColor;
+                mixedColor;
 
-            procentageText.text = similarity + "%";
+            UpdateFinishedGameFeedback(_goalColour, mixedColor, similarity);
         }
         else if (Input.GetKeyDown(KeyCode.UpArrow) && alreadyPulled)
         {
@@ -347,23 +363,55 @@ public class GameManagerScript : MonoBehaviour
         }
     }
 
-    float GetColorSimilarityPercentage(Color a, Color b)
+    private void UpdateFinishedGameFeedback(
+        Color goalColor,
+        Color mixedColor,
+        float similarity
+    )
     {
-        float rDiff = a.r - b.r;
-        float gDiff = a.g - b.g;
-        float bDiff = a.b - b.b;
+        if (procentageText != null)
+        {
+            procentageText.text = similarity.ToString("0.##") + "%";
+        }
 
-        float distance =
-            Mathf.Sqrt(rDiff * rDiff + gDiff * gDiff + bDiff * bDiff);
+        SetImageColor(goalColorImage, goalColor);
+        SetImageColor(mixedColorImage, mixedColor);
 
-        float knappheit =
-            1f - (distance / Mathf.Sqrt(3f));
+        SetColorChannel(goalRText, goalRBar, goalColor.r, Color.red);
+        SetColorChannel(goalGText, goalGBar, goalColor.g, Color.green);
+        SetColorChannel(goalBText, goalBBar, goalColor.b, Color.blue);
 
-        return Mathf.Clamp(
-            (float)System.Math.Round(knappheit * 100f, 2),
-            0f,
-            100f
-        );
+        SetColorChannel(mixedRText, mixedRBar, mixedColor.r, Color.red);
+        SetColorChannel(mixedGText, mixedGBar, mixedColor.g, Color.green);
+        SetColorChannel(mixedBText, mixedBBar, mixedColor.b, Color.blue);
+    }
+
+    private void SetImageColor(Image image, Color color)
+    {
+        if (image == null)
+        {
+            return;
+        }
+
+        color.a = 1f;
+        image.color = color;
+    }
+
+    private void SetColorChannel(TMP_Text text, Image bar, float value, Color barColor)
+    {
+        float clampedValue = Mathf.Clamp01(value);
+
+        if (text != null)
+        {
+            text.text = Mathf.RoundToInt(clampedValue * 255f).ToString();
+        }
+
+        if (bar != null)
+        {
+            bar.fillAmount = clampedValue;
+            barColor.a = bar.color.a > 0f ? bar.color.a : 1f;
+            bar.color = barColor;
+        }
     }
 
     private void SetRandomNameTexts(string value)

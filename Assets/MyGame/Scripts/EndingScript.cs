@@ -32,18 +32,15 @@ public class EndingScript : MonoBehaviour
     {
         wma = FindObjectOfType<WindmillManager>();
         cgsa = FindObjectOfType<GameManagerScript>();
-        float similarity = GetColorSimilarityPercentage(cgsa._goalColour, wma.windmillColor);
+        float similarity = ColorMatchUtility.CalculatePerceptualMatchPercent(
+            wma.windmillColor,
+            cgsa._goalColour
+        );
+
         goalSphere.GetComponent<Renderer>().material.color = cgsa._goalColour;
         achievedSphere.GetComponent<Renderer>().material.color = wma.windmillColor;
         procentageText.text = similarity + "%";
-        float rDiff = a.r - b.r;
-        float gDiff = a.g - b.g;
-        float bDiff = a.b - b.b;
 
-        float distance = Mathf.Sqrt(rDiff * rDiff + gDiff * gDiff + bDiff * bDiff);
-        float knappheit = 1f - (distance / Mathf.Sqrt(3f));
-
-        return Mathf.Clamp((float)System.Math.Round(knappheit * 100f, 2), 0f, 100f);
-
+        return similarity;
     }
 }
