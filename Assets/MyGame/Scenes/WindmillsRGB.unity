@@ -5486,6 +5486,7 @@ MonoBehaviour:
   procentageText: {fileID: 423842640}
   finishedGameCanvas: {fileID: 1293708962}
   selectedColorEmpty: {fileID: 2092397873}
+  selectedColorCanvas: {fileID: 2077390276}
 --- !u!1 &676336784
 GameObject:
   m_ObjectHideFlags: 0
@@ -21510,12 +21511,12 @@ GameObject:
   - component: {fileID: 2077390278}
   - component: {fileID: 2077390277}
   m_Layer: 5
-  m_Name: CanvasColor
+  m_Name: CanvasSelectedColor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &2077390277
 MonoBehaviour:
   m_ObjectHideFlags: 0

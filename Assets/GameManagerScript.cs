@@ -40,7 +40,7 @@ public class GameManagerScript : MonoBehaviour
 
     [Header("SelectedColor")]
     public Image selectedColorEmpty;
-
+    public GameObject selectedColorCanvas;
 
 
     // Liste der männlichen Adjektive
@@ -128,6 +128,11 @@ public class GameManagerScript : MonoBehaviour
 
     }
 
+    public void ActivateSelectedColorCanvas()
+    {
+        selectedColorCanvas.SetActive(true);
+    }
+
     public void SelectColorGoal(int a)
     {
             // Sprite vom angeklickten Button übernehmen
@@ -163,6 +168,9 @@ public class GameManagerScript : MonoBehaviour
             }
 
             colourCanvas.SetActive(false);
+
+            selectedColorCanvas.SetActive(true);
+
             _goalColour = _colorsArray[a];
     }
     void Update()
