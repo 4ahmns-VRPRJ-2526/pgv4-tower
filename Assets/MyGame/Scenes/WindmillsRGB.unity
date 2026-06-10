@@ -7896,6 +7896,7 @@ MonoBehaviour:
   mixedGBar: {fileID: 441551384}
   mixedBBar: {fileID: 45776519}
   finishedGameCanvas: {fileID: 1293708962}
+  dataLogger: {fileID: 1738988699}
   resolutionWidth: 0
   resolutionHeight: 0
   screenHorizontal: 0

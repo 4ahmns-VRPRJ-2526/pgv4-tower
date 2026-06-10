@@ -66,4 +66,5 @@ public class DataLogger : MonoBehaviour
             WriteNewDataToCSV();
         }
     }
+
 }
