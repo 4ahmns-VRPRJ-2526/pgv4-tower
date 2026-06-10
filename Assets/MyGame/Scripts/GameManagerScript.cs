@@ -304,6 +304,7 @@ public class GameManagerScript : MonoBehaviour
                 mixedColor,
                 _goalColour
             );
+
             dataLogger.currentUserScore = similarity;
 
             goalSphere.GetComponent<Renderer>().material.color = _goalColour;
