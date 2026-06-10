@@ -2156,7 +2156,7 @@ GameObject:
   - component: {fileID: 194715812}
   - component: {fileID: 194715811}
   m_Layer: 5
-  m_Name: MixedColor
+  m_Name: GoalColor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2178,7 +2178,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -129.3, y: 430.35}
+  m_AnchoredPosition: {x: -128.64, y: 430.35}
   m_SizeDelta: {x: 520, y: 520}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &194715811
@@ -7881,8 +7881,8 @@ MonoBehaviour:
   goalSphereParent: {fileID: 455215896}
   achievedSphereParent: {fileID: 1341445033}
   procentageText: {fileID: 423842640}
-  goalColorImage: {fileID: 1461885163}
-  mixedColorImage: {fileID: 194715811}
+  goalColorImage: {fileID: 194715811}
+  mixedColorImage: {fileID: 1461885163}
   goalRText: {fileID: 812623900}
   goalGText: {fileID: 649095101}
   goalBText: {fileID: 1879908293}
@@ -10621,7 +10621,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -246.6, y: 460}
+  m_AnchoredPosition: {x: 523, y: 460}
   m_SizeDelta: {x: 500, y: 500}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &918518788
@@ -10657,7 +10657,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Mischergebnis
+  m_Text: 'Ergebnis
+
+'
 --- !u!222 &918518789
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -15547,7 +15549,7 @@ GameObject:
   - component: {fileID: 1461885164}
   - component: {fileID: 1461885163}
   m_Layer: 5
-  m_Name: GoalColor
+  m_Name: MixedColor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -15569,7 +15571,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 430.35}
+  m_AnchoredPosition: {x: -3.84, y: 431.6}
   m_SizeDelta: {x: 520, y: 520}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1461885163
@@ -16406,7 +16408,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 524, y: 460}
+  m_AnchoredPosition: {x: -193.2, y: 460}
   m_SizeDelta: {x: 500, y: 500}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1513318158
