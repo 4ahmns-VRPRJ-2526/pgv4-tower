@@ -73,6 +73,7 @@ public class GameManagerScript : MonoBehaviour
     [SerializeField] Image mixedBBar;
 
     public GameObject finishedGameCanvas;
+    public GameObject finishedGameCanvasLandscape;
 
     bool alreadyPulled = false;
     public int resolutionWidth, resolutionHeight;
@@ -290,9 +291,17 @@ public class GameManagerScript : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.UpArrow) && !alreadyPulled)
         {
-            finishedGameCanvas.SetActive(true);
+            
+            if (ItIsHorizontal())
+            {
+               finishedGameCanvasLandscape.SetActive(true);
+            }
+            else
+            {
+               finishedGameCanvas.SetActive(true);
+            }
 
-            achievedSphereParent.SetActive(true);
+                achievedSphereParent.SetActive(true);
             goalSphereParent.SetActive(true);
 
             alreadyPulled = true;
