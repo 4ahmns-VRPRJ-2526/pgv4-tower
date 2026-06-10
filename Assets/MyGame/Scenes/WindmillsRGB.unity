@@ -8208,20 +8208,51 @@ MonoBehaviour:
   goalSphereParent: {fileID: 455215896}
   achievedSphereParent: {fileID: 1341445033}
   procentageText: {fileID: 423842640}
-  goalColorImage: {fileID: 194715811}
-  mixedColorImage: {fileID: 1461885163}
-  goalRText: {fileID: 812623900}
-  goalGText: {fileID: 649095101}
-  goalBText: {fileID: 1879908293}
-  mixedRText: {fileID: 1645879207}
-  mixedGText: {fileID: 1671346919}
-  mixedBText: {fileID: 1468022118}
-  goalRBar: {fileID: 898880011}
-  goalGBar: {fileID: 587529543}
-  goalBBar: {fileID: 1922821063}
-  mixedRBar: {fileID: 1073331034}
-  mixedGBar: {fileID: 441551384}
-  mixedBBar: {fileID: 45776519}
+  goalColorImages:
+  - {fileID: 194715811}
+  - {fileID: 1305574539}
+  mixedColorImages:
+  - {fileID: 1461885163}
+  - {fileID: 2013805351}
+  goalRTexts:
+  - {fileID: 812623900}
+  - {fileID: 2033815454}
+  goalGTexts:
+  - {fileID: 649095101}
+  - {fileID: 748507539}
+  goalBTexts:
+  - {fileID: 1879908293}
+  - {fileID: 872896212}
+  mixedRTexts:
+  - {fileID: 1645879207}
+  - {fileID: 1607136102}
+  mixedGTexts:
+  - {fileID: 1671346919}
+  - {fileID: 1906608822}
+  mixedBTexts:
+  - {fileID: 1468022118}
+  - {fileID: 2090636242}
+  goalRBars:
+  - {fileID: 898880011}
+  - {fileID: 90941402}
+  goalGBars:
+  - {fileID: 587529543}
+  - {fileID: 2046546022}
+  goalBBars:
+  - {fileID: 1922821063}
+  - {fileID: 2113471158}
+  mixedRBars:
+  - {fileID: 1073331034}
+  - {fileID: 217616711}
+  mixedGBars:
+  - {fileID: 441551384}
+  - {fileID: 956869785}
+  mixedBBars:
+  - {fileID: 45776519}
+  - {fileID: 2145348390}
+  percentageTexts:
+  - {fileID: 423842640}
+  - {fileID: 1910505998}
   finishedGameCanvas: {fileID: 1293708962}
   finishedGameCanvasLandscape: {fileID: 458575708}
   resolutionWidth: 0

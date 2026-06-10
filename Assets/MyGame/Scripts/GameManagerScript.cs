@@ -57,20 +57,26 @@ public class GameManagerScript : MonoBehaviour
     [SerializeField] TMP_Text procentageText;
 
     [Header("Finished Game Feedback")]
-    [SerializeField] Image goalColorImage;
-    [SerializeField] Image mixedColorImage;
-    [SerializeField] TMP_Text goalRText;
-    [SerializeField] TMP_Text goalGText;
-    [SerializeField] TMP_Text goalBText;
-    [SerializeField] TMP_Text mixedRText;
-    [SerializeField] TMP_Text mixedGText;
-    [SerializeField] TMP_Text mixedBText;
-    [SerializeField] Image goalRBar;
-    [SerializeField] Image goalGBar;
-    [SerializeField] Image goalBBar;
-    [SerializeField] Image mixedRBar;
-    [SerializeField] Image mixedGBar;
-    [SerializeField] Image mixedBBar;
+    [SerializeField] Image[] goalColorImages;
+    [SerializeField] Image[] mixedColorImages;
+
+    [SerializeField] TMP_Text[] goalRTexts;
+    [SerializeField] TMP_Text[] goalGTexts;
+    [SerializeField] TMP_Text[] goalBTexts;
+
+    [SerializeField] TMP_Text[] mixedRTexts;
+    [SerializeField] TMP_Text[] mixedGTexts;
+    [SerializeField] TMP_Text[] mixedBTexts;
+
+    [SerializeField] Image[] goalRBars;
+    [SerializeField] Image[] goalGBars;
+    [SerializeField] Image[] goalBBars;
+
+    [SerializeField] Image[] mixedRBars;
+    [SerializeField] Image[] mixedGBars;
+    [SerializeField] Image[] mixedBBars;
+
+    [SerializeField] TMP_Text[] percentageTexts;
 
     public GameObject finishedGameCanvas;
     public GameObject finishedGameCanvasLandscape;
@@ -375,24 +381,54 @@ public class GameManagerScript : MonoBehaviour
     private void UpdateFinishedGameFeedback(
         Color goalColor,
         Color mixedColor,
-        float similarity
-    )
+        float similarity)
     {
-        if (procentageText != null)
+        foreach (var text in percentageTexts)
         {
-            procentageText.text = similarity.ToString("0.##") + "%";
+            if (text != null)
+                text.text = similarity.ToString("0.##") + "%";
         }
 
-        SetImageColor(goalColorImage, goalColor);
-        SetImageColor(mixedColorImage, mixedColor);
+        foreach (var image in goalColorImages)
+        {
+            SetImageColor(image, goalColor);
+        }
 
-        SetColorChannel(goalRText, goalRBar, goalColor.r, Color.red);
-        SetColorChannel(goalGText, goalGBar, goalColor.g, Color.green);
-        SetColorChannel(goalBText, goalBBar, goalColor.b, Color.blue);
+        foreach (var image in mixedColorImages)
+        {
+            SetImageColor(image, mixedColor);
+        }
 
-        SetColorChannel(mixedRText, mixedRBar, mixedColor.r, Color.red);
-        SetColorChannel(mixedGText, mixedGBar, mixedColor.g, Color.green);
-        SetColorChannel(mixedBText, mixedBBar, mixedColor.b, Color.blue);
+        UpdateChannel(goalRTexts, goalRBars, goalColor.r, Color.red);
+        UpdateChannel(goalGTexts, goalGBars, goalColor.g, Color.green);
+        UpdateChannel(goalBTexts, goalBBars, goalColor.b, Color.blue);
+
+        UpdateChannel(mixedRTexts, mixedRBars, mixedColor.r, Color.red);
+        UpdateChannel(mixedGTexts, mixedGBars, mixedColor.g, Color.green);
+        UpdateChannel(mixedBTexts, mixedBBars, mixedColor.b, Color.blue);
+    }
+    private void UpdateChannel(
+    TMP_Text[] texts,
+    Image[] bars,
+    float value,
+    Color barColor)
+    {
+        float clampedValue = Mathf.Clamp01(value);
+
+        foreach (var text in texts)
+        {
+            if (text != null)
+                text.text = Mathf.RoundToInt(clampedValue * 255f).ToString();
+        }
+
+        foreach (var bar in bars)
+        {
+            if (bar != null)
+            {
+                bar.fillAmount = clampedValue;
+                bar.color = barColor;
+            }
+        }
     }
 
     private void SetImageColor(Image image, Color color)
