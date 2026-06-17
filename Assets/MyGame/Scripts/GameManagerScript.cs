@@ -22,6 +22,7 @@ public class GameManagerScript : MonoBehaviour
     public Color[] _colorsArray;
 
     [Header("RandomName")]
+    public DataLogger logger;
     public GameObject randomNameCanvas;
     public GameObject randomNameCanvasLandscape;
     public string randomName;
@@ -184,6 +185,7 @@ public class GameManagerScript : MonoBehaviour
         if (numberOfNameGenerations < numberOfNameGenerationsIsLimitedTo)
         {
             randomName = adjektive[Random.Range(0, adjektive.Length)] + " " + tiere[Random.Range(0, tiere.Length)];
+            logger.currentUserName = randomName;
             SetRandomNameTexts(randomName);
 
             numberOfNameGenerations += 1;

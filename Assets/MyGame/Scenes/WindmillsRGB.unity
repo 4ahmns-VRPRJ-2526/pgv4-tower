@@ -7858,6 +7858,7 @@ MonoBehaviour:
   - {r: 0.9803922, g: 0.6862745, b: 0.07450981, a: 0}
   - {r: 0.86274517, g: 0.454902, b: 0.0627451, a: 0}
   - {r: 0.12941177, g: 0.6, b: 0.33333334, a: 0}
+  logger: {fileID: 1738988699}
   randomNameCanvas: {fileID: 2003315871}
   randomNameCanvasLandscape: {fileID: 250531284}
   randomName: 
