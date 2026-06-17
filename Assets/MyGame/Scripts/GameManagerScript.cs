@@ -33,6 +33,7 @@ public class GameManagerScript : MonoBehaviour
     private int numberOfGenerationsLeft;
     public int numberOfNameGenerationsIsLimitedTo = 3;
     public Button generateNameButton;
+    public TMP_Text generateNameButtonText;
     public Button chooseNameButton;
     public Button generateNameButtonLandscape;
     public Button chooseNameButtonLandscape;
@@ -189,6 +190,11 @@ public class GameManagerScript : MonoBehaviour
             numberOfNameGenerations += 1;
             numberOfGenerationsLeft = numberOfNameGenerationsIsLimitedTo - numberOfNameGenerations;
             UpdateGenerationTexts();
+
+            if (numberOfNameGenerations > 0 && generateNameButtonText != null)
+            {
+                generateNameButtonText.text = "Neuen Namen Würfeln";
+            }
         }
 
         if (numberOfNameGenerations >= numberOfNameGenerationsIsLimitedTo)
@@ -430,7 +436,7 @@ public class GameManagerScript : MonoBehaviour
 
         if (GenerationsLeftText != null)
         {
-            GenerationsLeftText.text = value;
+            GenerationsLeftText.text = value + " übrig";
         }
 
         if (GenerationsLeftTextLandscape != null)
