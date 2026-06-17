@@ -78,6 +78,8 @@ public class GameManagerScript : MonoBehaviour
     public int resolutionWidth, resolutionHeight;
     public bool screenHorizontal;
 
+    public DataLogger dataLogger;
+
     // Liste der männlichen Adjektive
     private string[] adjektive = new string[]
     {
@@ -545,5 +547,13 @@ public class GameManagerScript : MonoBehaviour
         checkmarkText.fontSize = 42;
         checkmarkText.alignment = TextAlignmentOptions.Center;
         checkmarkText.color = new Color(0f, 0.82f, 0.03f, 1f);
+    }
+
+    void EndGame()
+    {
+        int score = 100;
+
+        // Neue Zeile in CSV schreiben
+        dataLogger.WriteData(score);
     }
 }

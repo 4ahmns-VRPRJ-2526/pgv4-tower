@@ -59,6 +59,12 @@ public class DataLogger : MonoBehaviour
             Debug.LogError("Error writing to CSV: " + e.Message);
         }
     }
+
+    public void WriteData(int score)
+    {
+        string line = score.ToString();
+        File.AppendAllText("data.csv", line + "\n");
+    }
     public void Update()
     {
         if (Input.GetKeyDown(manualLogKey))
