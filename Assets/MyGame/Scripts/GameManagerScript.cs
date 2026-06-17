@@ -553,7 +553,6 @@ public class GameManagerScript : MonoBehaviour
     {
         int score = 100;
 
-        // Neue Zeile in CSV schreiben
         dataLogger.WriteData(score);
     }
 }
