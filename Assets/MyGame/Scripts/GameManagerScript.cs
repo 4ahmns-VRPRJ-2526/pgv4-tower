@@ -213,7 +213,14 @@ public class GameManagerScript : MonoBehaviour
             }
 
             ActivateCoulorCanvas();
+            
+            SetSingletonDataName(randomName);
         }
+    }
+
+    private void SetSingletonDataName(string name)
+    {
+        GlobalGameData.Instance.currentUserName = name;
     }
 
     public void ActivateCoulorCanvas()
@@ -372,6 +379,7 @@ public class GameManagerScript : MonoBehaviour
         if (procentageText != null)
         {
             procentageText.text = similarity.ToString("0.##") + "%";
+            SetSingletonDataScore();
         }
 
         SetImageColor(goalColorImage, goalColor);
@@ -384,6 +392,11 @@ public class GameManagerScript : MonoBehaviour
         SetColorChannel(mixedRText, mixedRBar, mixedColor.r, Color.red);
         SetColorChannel(mixedGText, mixedGBar, mixedColor.g, Color.green);
         SetColorChannel(mixedBText, mixedBBar, mixedColor.b, Color.blue);
+    }
+
+    private void SetSingletonDataScore()
+    {
+        GlobalGameData.Instance.currentPercentScore = procentageText.text;
     }
 
     private void SetImageColor(Image image, Color color)
