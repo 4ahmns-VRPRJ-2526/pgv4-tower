@@ -94,6 +94,7 @@ public class GameManagerScript : MonoBehaviour
     [Header("SelectedColor")]
     public Image selectedColorEmpty;
     public GameObject selectedColorCanvas;
+    private bool mixingPhaseActive = false;
 
     // Liste der männlichen Adjektive
     private string[] adjektive = new string[]
@@ -187,7 +188,7 @@ public class GameManagerScript : MonoBehaviour
 
     public void ActivateRandomName()
     {
-        //ConfigureRandomNameControls();
+        ConfigureRandomNameControls();
 
         bool horizontal = ItIsHorizontal();
         SetCanvasActive(randomNameCanvas, !horizontal);
@@ -286,6 +287,7 @@ public class GameManagerScript : MonoBehaviour
         }
 
         ghostAnimator.SetTrigger("TrigGhost");
+        mixingPhaseActive = true;
 
         colourCanvas.SetActive(false);
 
@@ -303,7 +305,6 @@ public class GameManagerScript : MonoBehaviour
 
         _goalColour = _colorsArray[a];
     }
-
     // erst nachden PG fertigredet werden Windmills aktivieren & Im TextWait & DisabledInfoText auch ActivateWindmills Methode eingefügt falls User Text wegklickt = WIndmills auch gleich aktiviert
     public void ActivateWindmills()
     {
@@ -352,9 +353,8 @@ public class GameManagerScript : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.UpArrow) && !alreadyPulled)
+        if (Input.GetKeyDown(KeyCode.UpArrow) && mixingPhaseActive && !alreadyPulled)
         {
-            
             if (ItIsHorizontal())
             {
                finishedGameCanvasLandscape.SetActive(true);
