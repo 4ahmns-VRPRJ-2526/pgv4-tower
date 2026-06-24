@@ -78,6 +78,10 @@ public class GameManagerScript : MonoBehaviour
     public int resolutionWidth, resolutionHeight;
     public bool screenHorizontal;
 
+    [Header("SelectedColor")]
+    public Image selectedColorEmpty;
+    public GameObject selectedColorCanvas;
+
     // Liste der männlichen Adjektive
     private string[] adjektive = new string[]
     {
@@ -227,8 +231,27 @@ public class GameManagerScript : MonoBehaviour
         }
     }
 
+    public void ActivateSelectedColorCanvas()
+    {
+        if (selectedColorCanvas != null)
+        {
+            selectedColorCanvas.SetActive(true);
+        }
+    }
+
     public void SelectColorGoal(int a)
     {
+        GameObject caller = EventSystem.current.currentSelectedGameObject;
+        if (caller != null && selectedColorEmpty != null)
+        {
+            Image buttonImage = caller.GetComponent<Image>();
+            if (buttonImage != null)
+            {
+                selectedColorEmpty.sprite = buttonImage.sprite;
+                selectedColorEmpty.preserveAspect = true;
+            }
+        }
+
         ghostAnimator.SetTrigger("TrigGhost");
 
         wma.particlesTop.enableEmission = true;
@@ -258,6 +281,11 @@ public class GameManagerScript : MonoBehaviour
         }
 
         SetColorMenuNameTexts("");
+
+        if (selectedColorCanvas != null)
+        {
+            selectedColorCanvas.SetActive(true);
+        }
 
         _goalColour = _colorsArray[a];
     }
