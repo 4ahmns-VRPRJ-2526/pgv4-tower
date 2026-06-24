@@ -144,6 +144,20 @@ public class WindmillManager : MonoBehaviour
         }
     }
 
+    public void MoveGhostToCurrentWindmill()
+    {
+        if (ghostController == null || currentSelectedWindmill == null)
+        {
+            return;
+        }
+
+        int index = System.Array.IndexOf(windmills, currentSelectedWindmill);
+        if (index >= 0)
+        {
+            ghostController.FlyToWindmill(index);
+        }
+    }
+
     private void CheckIfAllLocked()
     {
         if (allWindmillsLocked)

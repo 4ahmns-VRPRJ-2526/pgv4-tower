@@ -335,6 +335,11 @@ public class GameManagerScript : MonoBehaviour
         {
             ui.interactable = true;
         }
+
+        if (wma != null)
+        {
+            wma.MoveGhostToCurrentWindmill();
+        }
     }
 
     void Update()
