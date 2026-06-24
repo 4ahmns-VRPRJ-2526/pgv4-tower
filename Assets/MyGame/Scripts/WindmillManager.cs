@@ -18,6 +18,8 @@ public class WindmillManager : MonoBehaviour
     private Windmill currentSelectedWindmill;
     private bool allWindmillsLocked = false;
 
+    public Renderer glowingResultCube;
+
     [Header("ParticleSystems")]
     public ParticleSystem particlesTop;
     public GameObject[] objectsToColor;
@@ -67,6 +69,15 @@ public class WindmillManager : MonoBehaviour
             {
                 rend.material.color = windmillColor;
             }
+        }
+
+        if (glowingResultCube != null)
+        {
+            glowingResultCube.material.color = windmillColor;
+
+            Color emissionColor = windmillColor;
+            glowingResultCube.material.SetColor("_EmissionColor", emissionColor);
+            glowingResultCube.material.EnableKeyword("_EMISSION");
         }
     }
 
