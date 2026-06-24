@@ -27,14 +27,16 @@ public class GameManagerScript : MonoBehaviour
     public string randomName;
     public TMP_Text randomNameText;
     public TMP_Text randomNameTextLandscape;
-    public TMP_Text GenerationsLeftText;
-    public TMP_Text GenerationsLeftTextLandscape;
+    public TMP_Text generationsLeftText;
+    public TMP_Text generationsLeftTextLandscape;
     private int numberOfNameGenerations;
     private int numberOfGenerationsLeft;
     public int numberOfNameGenerationsIsLimitedTo = 3;
     public Button generateNameButton;
+    public TMP_Text generateNameButtonText;
     public Button chooseNameButton;
     public Button generateNameButtonLandscape;
+    public TMP_Text generateNameButtonTextLandscape;
     public Button chooseNameButtonLandscape;
 
     public GameObject InfoButtonNew;
@@ -128,6 +130,8 @@ public class GameManagerScript : MonoBehaviour
 
     void Start()
     {
+        ConfigureRandomNameControls();
+
         numberOfNameGenerations = 0;
         numberOfGenerationsLeft = numberOfNameGenerationsIsLimitedTo;
         UpdateGenerationTexts();
@@ -178,18 +182,21 @@ public class GameManagerScript : MonoBehaviour
     {
         resolutionWidth = Screen.width;
         resolutionHeight = Screen.height;
-        return resolutionWidth > 1080;
+        return resolutionWidth > resolutionHeight;
     }
 
     public void ActivateRandomName()
     {
-        bool horizontal = ItIsHorizontal();
-        randomNameCanvas.SetActive(!horizontal);
+        //ConfigureRandomNameControls();
 
-        if (randomNameCanvasLandscape != null)
-        {
-            randomNameCanvasLandscape.SetActive(horizontal);
-        }
+        bool horizontal = ItIsHorizontal();
+        SetCanvasActive(randomNameCanvas, !horizontal);
+        SetCanvasActive(randomNameCanvasLandscape, horizontal);
+
+        SetGenerateButtons(numberOfNameGenerations < numberOfNameGenerationsIsLimitedTo);
+        SetChooseButtons(numberOfNameGenerations > 0 && !string.IsNullOrEmpty(randomName));
+        UpdateGenerationTexts();
+        SetRandomNameTexts(randomName);
 
         GameObject callerx = EventSystem.current.currentSelectedGameObject;
 
@@ -198,9 +205,9 @@ public class GameManagerScript : MonoBehaviour
             callerx.SetActive(false);
         }
     }
-
     public void ChooseRandomName()
     {
+        Debug.Log("Choooose");
         if (numberOfNameGenerations < numberOfNameGenerationsIsLimitedTo)
         {
             randomName = adjektive[Random.Range(0, adjektive.Length)] + " " + tiere[Random.Range(0, tiere.Length)];
@@ -209,6 +216,11 @@ public class GameManagerScript : MonoBehaviour
             numberOfNameGenerations += 1;
             numberOfGenerationsLeft = numberOfNameGenerationsIsLimitedTo - numberOfNameGenerations;
             UpdateGenerationTexts();
+
+            if (numberOfNameGenerations > 0)
+            {
+                SetGenerateButtonTexts("Neuen Namen Würfeln");
+            }
         }
 
         if (numberOfNameGenerations >= numberOfNameGenerationsIsLimitedTo)
@@ -519,28 +531,108 @@ public class GameManagerScript : MonoBehaviour
         }
     }
 
+    private void ConfigureRandomNameControls()
+    {
+        if (generateNameButtonLandscape == null && randomNameCanvasLandscape != null)
+        {
+            generateNameButtonLandscape = FindButtonInCanvas(randomNameCanvasLandscape, "GenerateNameButtonLandscape", "GenerateNameButton", "Button");
+        }
+
+        if (chooseNameButtonLandscape == null && randomNameCanvasLandscape != null)
+        {
+            chooseNameButtonLandscape = FindButtonInCanvas(randomNameCanvasLandscape, "ChooseNameButtonLandscape", "ChooseNameButton");
+        }
+
+        WireButton(generateNameButton, ChooseRandomName);
+        WireButton(generateNameButtonLandscape, ChooseRandomName);
+        WireButton(chooseNameButton, ChooseThisName);
+        WireButton(chooseNameButtonLandscape, ChooseThisName);
+
+        if (generateNameButtonText == null && generateNameButton != null)
+        {
+            generateNameButtonText = generateNameButton.GetComponentInChildren<TMP_Text>(true);
+        }
+
+        if (generateNameButtonTextLandscape == null && generateNameButtonLandscape != null)
+        {
+            generateNameButtonTextLandscape = generateNameButtonLandscape.GetComponentInChildren<TMP_Text>(true);
+        }
+    }
+
+    private void WireButton(Button button, UnityEngine.Events.UnityAction action)
+    {
+        if (button == null)
+        {
+            return;
+        }
+
+        button.onClick.RemoveListener(action);
+        button.onClick.AddListener(action);
+    }
+
+    private void SetGenerateButtonTexts(string value)
+    {
+        if (generateNameButtonText != null)
+        {
+            generateNameButtonText.text = value;
+        }
+
+        if (generateNameButtonTextLandscape != null)
+        {
+            generateNameButtonTextLandscape.text = value;
+        }
+    }
+
+    private void SetCanvasActive(GameObject canvas, bool active)
+    {
+        if (canvas != null)
+        {
+            canvas.SetActive(active);
+        }
+    }
+
+    private Button FindButtonInCanvas(GameObject canvas, params string[] names)
+    {
+        Button[] buttons = canvas.GetComponentsInChildren<Button>(true);
+
+        foreach (string name in names)
+        {
+            foreach (Button button in buttons)
+            {
+                if (button.name == name)
+                {
+                    return button;
+                }
+            }
+        }
+
+        return buttons.Length > 0 ? buttons[0] : null;
+    }
+
     private void SetRandomNameTexts(string value)
     {
-        randomNameText.text = value;
+        if (randomNameText != null)
+        {
+            randomNameText.text = value;
+        }
 
         if (randomNameTextLandscape != null)
         {
             randomNameTextLandscape.text = value;
         }
     }
-
     private void UpdateGenerationTexts()
     {
         string value = numberOfGenerationsLeft.ToString();
 
-        if (GenerationsLeftText != null)
+        if (generationsLeftText != null)
         {
-            GenerationsLeftText.text = value;
+            generationsLeftText.text = value + " übrig";
         }
 
-        if (GenerationsLeftTextLandscape != null)
+        if (generationsLeftTextLandscape != null)
         {
-            GenerationsLeftTextLandscape.text = value;
+            generationsLeftTextLandscape.text = value + " übrig";
         }
     }
 
@@ -666,4 +758,5 @@ public class GameManagerScript : MonoBehaviour
         }
     }
 }
+
 
