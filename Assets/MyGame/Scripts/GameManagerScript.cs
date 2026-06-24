@@ -85,6 +85,8 @@ public class GameManagerScript : MonoBehaviour
     public int resolutionWidth, resolutionHeight;
     public bool screenHorizontal;
 
+    private bool mixingPhaseActive = false;
+
     // Liste der männlichen Adjektive
     private string[] adjektive = new string[]
     {
@@ -238,6 +240,8 @@ public class GameManagerScript : MonoBehaviour
     {
         ghostAnimator.SetTrigger("TrigGhost");
 
+        mixingPhaseActive = true; 
+
         wma.particlesTop.enableEmission = true;
 
         foreach (GameObject obj in objectsWithScripts)
@@ -295,8 +299,7 @@ public class GameManagerScript : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.UpArrow) && !alreadyPulled)
-        {
+        if (Input.GetKeyDown( KeyCode.UpArrow) && mixingPhaseActive && !alreadyPulled) 
             
             if (ItIsHorizontal())
             {
