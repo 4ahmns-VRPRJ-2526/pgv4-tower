@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -146,6 +146,11 @@ public class GameManagerScript : MonoBehaviour
 
         wma = GameObject.FindObjectOfType<WindmillManager>();
 
+        if (dataLogger == null)
+        {
+            dataLogger = GameObject.FindObjectOfType<DataLogger>();
+        }
+
         var emission = wma.particlesTop.emission;
         emission.enabled = false;
 
@@ -219,6 +224,11 @@ public class GameManagerScript : MonoBehaviour
         if (numberOfNameGenerations > 0 && !string.IsNullOrEmpty(randomName))
         {
             SetColorMenuNameTexts(randomName + ",");
+
+            if (dataLogger != null)
+            {
+                dataLogger.currentUserName = randomName;
+            }
 
             randomNameCanvas.SetActive(false);
 
@@ -350,7 +360,16 @@ public class GameManagerScript : MonoBehaviour
                 _goalColour
             );
 
-            dataLogger.currentUserScore = similarity;
+            if (dataLogger != null)
+            {
+                dataLogger.currentUserName = string.IsNullOrEmpty(randomName) ? dataLogger.currentUserName : randomName;
+                dataLogger.currentUserScore = similarity;
+                dataLogger.WriteNewDataToCSV();
+            }
+            else
+            {
+                Debug.LogWarning("GameManagerScript: No DataLogger assigned, score was not written.");
+            }
 
             goalSphere.GetComponent<Renderer>().material.color = _goalColour;
 
@@ -625,4 +644,19 @@ public class GameManagerScript : MonoBehaviour
         checkmarkText.alignment = TextAlignmentOptions.Center;
         checkmarkText.color = new Color(0f, 0.82f, 0.03f, 1f);
     }
+
+    void EndGame()
+    {
+        int score = 100;
+
+        if (dataLogger != null)
+        {
+            dataLogger.WriteData(score);
+        }
+        else
+        {
+            Debug.LogWarning("GameManagerScript: No DataLogger assigned, score was not written.");
+        }
+    }
 }
+
