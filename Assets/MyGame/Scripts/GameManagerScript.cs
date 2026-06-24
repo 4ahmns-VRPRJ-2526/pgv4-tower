@@ -275,25 +275,6 @@ public class GameManagerScript : MonoBehaviour
 
         ghostAnimator.SetTrigger("TrigGhost");
 
-        wma.particlesTop.enableEmission = true;
-
-        foreach (GameObject obj in objectsWithScripts)
-        {
-            MonoBehaviour[] scripts = obj.GetComponents<MonoBehaviour>();
-
-            foreach (MonoBehaviour script in scripts)
-            {
-                if (script == this) continue;
-
-                script.enabled = true;
-            }
-        }
-
-        foreach (Selectable ui in uiElementsToDisable)
-        {
-            ui.interactable = true;
-        }
-
         colourCanvas.SetActive(false);
 
         if (colourCanvasLandscape != null)
@@ -309,6 +290,28 @@ public class GameManagerScript : MonoBehaviour
         }
 
         _goalColour = _colorsArray[a];
+    }
+
+    // erst nachden PG fertigredet werden Windmills aktivieren & Im TextWait & DisabledInfoText auch ActivateWindmills Methode eingefügt falls User Text wegklickt = WIndmills auch gleich aktiviert
+    public void ActivateWindmills()
+    {
+        wma.particlesTop.enableEmission = true;
+
+        foreach (GameObject obj in objectsWithScripts)
+        {
+            MonoBehaviour[] scripts = obj.GetComponents<MonoBehaviour>();
+
+            foreach (MonoBehaviour script in scripts)
+            {
+                if (script == this) continue;
+                script.enabled = true;
+            }
+        }
+
+        foreach (Selectable ui in uiElementsToDisable)
+        {
+            ui.interactable = true;
+        }
     }
 
     void Update()
@@ -419,6 +422,8 @@ public class GameManagerScript : MonoBehaviour
         {
             textCanvasLandscape.SetActive(false);
         }
+
+        ActivateWindmills();
     }
 
     public void DisableInfoText()
@@ -429,6 +434,8 @@ public class GameManagerScript : MonoBehaviour
         {
             textCanvasLandscape.SetActive(false);
         }
+
+        ActivateWindmills();
     }
 
     private void UpdateFinishedGameFeedback(
