@@ -37,6 +37,8 @@ public class GameManagerScript : MonoBehaviour
     public Button generateNameButtonLandscape;
     public Button chooseNameButtonLandscape;
 
+    public GameObject InfoButtonNew;
+
     // NEU: Text oben im Color Selection Menu
     public TMP_Text colorMenuNameText;
     public TMP_Text colorMenuNameTextLandscape;
@@ -310,13 +312,13 @@ public class GameManagerScript : MonoBehaviour
                 if (ItIsHorizontal() && textCanvasLandscape != null)
                 {
                     textCanvasLandscape.SetActive(true);
-                    EnsureInfoTextButton(textCanvasLandscape);
                 }
                 else
                 {
                     textCanvas.SetActive(true);
-                    EnsureInfoTextButton(textCanvas);
                 }
+
+                InfoButtonNew.SetActive(true);
 
                 StartCoroutine(TextWait());
                 hasShownText = true;
