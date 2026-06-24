@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -251,6 +251,16 @@ public class GameManagerScript : MonoBehaviour
             }
 
             ActivateCoulorCanvas();
+
+            SetSingletonDataName(randomName);
+        }
+    }
+
+    private void SetSingletonDataName(string name)
+    {
+        if (GlobalGameData.Instance != null)
+        {
+            GlobalGameData.Instance.currentUserName = name;
         }
     }
 
@@ -455,11 +465,20 @@ public class GameManagerScript : MonoBehaviour
         Color mixedColor,
         float similarity)
     {
+        string scoreText = similarity.ToString("0.##") + "%";
+
         foreach (var text in percentageTexts)
         {
             if (text != null)
-                text.text = similarity.ToString("0.##") + "%";
+                text.text = scoreText;
         }
+
+        if (procentageText != null)
+        {
+            procentageText.text = scoreText;
+        }
+
+        SetSingletonDataScore(scoreText);
 
         foreach (var image in goalColorImages)
         {
@@ -479,11 +498,12 @@ public class GameManagerScript : MonoBehaviour
         UpdateChannel(mixedGTexts, mixedGBars, mixedColor.g, Color.green);
         UpdateChannel(mixedBTexts, mixedBBars, mixedColor.b, Color.blue);
     }
+
     private void UpdateChannel(
-    TMP_Text[] texts,
-    Image[] bars,
-    float value,
-    Color barColor)
+        TMP_Text[] texts,
+        Image[] bars,
+        float value,
+        Color barColor)
     {
         float clampedValue = Mathf.Clamp01(value);
 
@@ -500,6 +520,14 @@ public class GameManagerScript : MonoBehaviour
                 bar.fillAmount = clampedValue;
                 bar.color = barColor;
             }
+        }
+    }
+
+    private void SetSingletonDataScore(string scoreText)
+    {
+        if (GlobalGameData.Instance != null)
+        {
+            GlobalGameData.Instance.currentPercentScore = scoreText;
         }
     }
 
