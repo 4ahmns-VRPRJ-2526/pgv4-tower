@@ -8848,6 +8848,7 @@ MonoBehaviour:
   - {fileID: 423842640}
   - {fileID: 1910505998}
   finishedGameCanvas: {fileID: 1293708962}
+  dataLogger: {fileID: 1738988699}
   finishedGameCanvasLandscape: {fileID: 458575708}
   resolutionWidth: 0
   resolutionHeight: 0

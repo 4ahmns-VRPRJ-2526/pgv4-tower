@@ -1,11 +1,10 @@
-using System;
+﻿using System;
 using UnityEngine;
 using System.IO;
 
 public class DataLogger : MonoBehaviour
 {
     [Header("User Data (Set by External Scripts)")]
-
     public int currentUserID;
     public string currentUserName = "Wilder Hase";
     public float currentUserScore = 55;
@@ -17,21 +16,16 @@ public class DataLogger : MonoBehaviour
 
     private void Awake()
     {
-        // 1. LOAD THE ID: Check device memory for a saved ID. 
-        // If nothing is saved (e.g., very first time opening the game), it defaults to 1111.
+        // Load the next ID from device memory, or start at 1111 on first launch.
         currentUserID = PlayerPrefs.GetInt("SavedUserID", 1111);
 
-        // 2. Create filename with date and time
         string fileTimeStamp = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
         string fileName = fileTimeStamp + "_DataLog.csv";
 
-        // Path logic
         filePath = Path.Combine(Application.persistentDataPath, fileName);
 
-        // 3. Create the file and write the header with the Excel "sep=" fix
         if (!File.Exists(filePath))
         {
-            // The first line "sep=," tells Excel specifically to use commas for columns
             string header = "sep=," + Environment.NewLine + "ID,Name,Score" + Environment.NewLine;
             File.WriteAllText(filePath, header);
             Debug.Log("Log File created at: " + filePath);
@@ -40,27 +34,17 @@ public class DataLogger : MonoBehaviour
 
     public void WriteNewDataToCSV()
     {
-        // 4. Format the Time part (HHMM in 24h format)
         string timePart = DateTime.Now.ToString("HHmm");
-
-        // 5. Create the Full ID: 4-digit counter + HHMM
-        // "D4" ensures it stays 4 digits (e.g., 1111, 1112...)
         string fullID = currentUserID.ToString("D4") + timePart;
-
-        // 6. Create the CSV line (Directly using commas like your first code)
-        // We wrap the name in quotes just in case the name contains a comma
         string csvLine = fullID + ",\"" + currentUserName + "\"," + currentUserScore;
 
         try
         {
             File.AppendAllText(filePath, csvLine + Environment.NewLine);
 
-            // 7. Increment the ID for the next user
             currentUserID++;
-
-            // 8. SAVE THE NEW ID: Write the new incremented ID to device memory
             PlayerPrefs.SetInt("SavedUserID", currentUserID);
-            PlayerPrefs.Save(); // Forces Unity to write to disk immediately
+            PlayerPrefs.Save();
 
             Debug.Log("Line written to file. Next User ID saved as: " + currentUserID);
         }

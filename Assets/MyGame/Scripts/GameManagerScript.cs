@@ -83,6 +83,8 @@ public class GameManagerScript : MonoBehaviour
     public GameObject finishedGameCanvas;
     public GameObject finishedGameCanvasLandscape;
 
+    [SerializeField] DataLogger dataLogger;
+
     bool alreadyPulled = false;
     public int resolutionWidth, resolutionHeight;
     public bool screenHorizontal;
@@ -347,6 +349,8 @@ public class GameManagerScript : MonoBehaviour
                 mixedColor,
                 _goalColour
             );
+
+            dataLogger.currentUserScore = similarity;
 
             goalSphere.GetComponent<Renderer>().material.color = _goalColour;
 
