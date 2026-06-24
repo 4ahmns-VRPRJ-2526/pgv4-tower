@@ -5,25 +5,30 @@ using System.IO;
 public class DataLogger : MonoBehaviour
 {
     [Header("User Data (Set by External Scripts)")]
-    public int currentUserID = 1111; // This is the starting counter
+
+    public int currentUserID;
     public string currentUserName = "Wilder Hase";
     public float currentUserScore = 55;
 
-    [Header("Manusl Logging")]
+    [Header("Manual Logging")]
     [SerializeField] private KeyCode manualLogKey;
 
     private string filePath;
 
     private void Awake()
     {
-        // 1. Create filename with date and time
+        // 1. LOAD THE ID: Check device memory for a saved ID. 
+        // If nothing is saved (e.g., very first time opening the game), it defaults to 1111.
+        currentUserID = PlayerPrefs.GetInt("SavedUserID", 1111);
+
+        // 2. Create filename with date and time
         string fileTimeStamp = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss");
         string fileName = fileTimeStamp + "_DataLog.csv";
 
         // Path logic
         filePath = Path.Combine(Application.persistentDataPath, fileName);
 
-        // 2. Create the file and write the header with the Excel "sep=" fix
+        // 3. Create the file and write the header with the Excel "sep=" fix
         if (!File.Exists(filePath))
         {
             // The first line "sep=," tells Excel specifically to use commas for columns
@@ -35,14 +40,14 @@ public class DataLogger : MonoBehaviour
 
     public void WriteNewDataToCSV()
     {
-        // 3. Format the Time part (HHMM in 24h format)
+        // 4. Format the Time part (HHMM in 24h format)
         string timePart = DateTime.Now.ToString("HHmm");
 
-        // 4. Create the Full ID: 4-digit counter + HHMM
+        // 5. Create the Full ID: 4-digit counter + HHMM
         // "D4" ensures it stays 4 digits (e.g., 1111, 1112...)
         string fullID = currentUserID.ToString("D4") + timePart;
 
-        // 5. Create the CSV line (Directly using commas like your first code)
+        // 6. Create the CSV line (Directly using commas like your first code)
         // We wrap the name in quotes just in case the name contains a comma
         string csvLine = fullID + ",\"" + currentUserName + "\"," + currentUserScore;
 
@@ -50,15 +55,21 @@ public class DataLogger : MonoBehaviour
         {
             File.AppendAllText(filePath, csvLine + Environment.NewLine);
 
+            // 7. Increment the ID for the next user
             currentUserID++;
 
-            Debug.Log("Line written to file");
+            // 8. SAVE THE NEW ID: Write the new incremented ID to device memory
+            PlayerPrefs.SetInt("SavedUserID", currentUserID);
+            PlayerPrefs.Save(); // Forces Unity to write to disk immediately
+
+            Debug.Log("Line written to file. Next User ID saved as: " + currentUserID);
         }
         catch (Exception e)
         {
             Debug.LogError("Error writing to CSV: " + e.Message);
         }
     }
+
     public void Update()
     {
         if (Input.GetKeyDown(manualLogKey))
