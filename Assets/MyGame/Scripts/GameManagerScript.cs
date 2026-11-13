@@ -25,6 +25,7 @@ public class GameManagerScript : MonoBehaviour
     public GameObject randomNameCanvas;
     public GameObject randomNameCanvasLandscape;
     public string randomName;
+    [SerializeField] private PgAdventureName pgAdventureName;
     public TMP_Text randomNameText;
     public TMP_Text randomNameTextLandscape;
     public TMP_Text generationsLeftText;
@@ -261,6 +262,7 @@ public class GameManagerScript : MonoBehaviour
         if (numberOfNameGenerations > 0 && !string.IsNullOrEmpty(randomName))
         {
             SetColorMenuNameTexts(randomName);
+            if (pgAdventureName != null) pgAdventureName.Introduce(randomName);
 
             if (dataLogger != null)
             {

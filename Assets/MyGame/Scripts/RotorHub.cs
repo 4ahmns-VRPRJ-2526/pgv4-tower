@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class RotorHub : MonoBehaviour
 {
+    public static float LastBlowTime { get; private set; } = float.NegativeInfinity;
     private const float MAX_ROTATION_SPEED = 255f; // Maximum speed
     private const float UNSET_CONST_ROTATION = -1f; // Constant Rotation not set
 
@@ -51,6 +52,7 @@ public class RotorHub : MonoBehaviour
         // Holding Space increases rotation speed
         if (isKeyPressed)
         {
+            LastBlowTime = Time.unscaledTime;
             currentSpeed += acceleration * Time.deltaTime;
         }
         else

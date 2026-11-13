@@ -11,6 +11,7 @@ public sealed class PepperGhostFinale : MonoBehaviour
     [SerializeField] private Transform head;
     [SerializeField] private ParticleSystem celebrationParticles;
     [SerializeField] private Material lightMaterial;
+    [SerializeField] private PgAdventureName adventureNameCaption;
     [SerializeField, Min(1f)] private float stageDepth = 12f;
     [SerializeField, Min(0.1f)] private float receiveDuration = 2f;
     [SerializeField, Min(0.1f)] private float celebrationDuration = 2f;
@@ -61,6 +62,7 @@ public sealed class PepperGhostFinale : MonoBehaviour
     public IEnumerator Celebrate(Color color)
     {
         if (!posed || ring == null) yield break;
+        if (adventureNameCaption != null) adventureNameCaption.Celebrate();
         if (celebrationParticles != null)
         {
             var burst = new ParticleSystem.EmitParams { startColor = color, velocity = Vector3.up * 1.5f };
@@ -100,6 +102,7 @@ public sealed class PepperGhostFinale : MonoBehaviour
 
     public IEnumerator FlyAway()
     {
+        if (adventureNameCaption != null) adventureNameCaption.Hide();
         if (!posed || fino == null || presentationCamera == null) yield break;
         departing = true;
         if (orb != null) orb.SetActive(false);
@@ -212,6 +215,7 @@ public sealed class PepperGhostFinale : MonoBehaviour
 
     public void ResetFinale()
     {
+        if (adventureNameCaption != null) adventureNameCaption.Hide();
         if (orb != null) orb.SetActive(false);
         if (ring != null) ring.enabled = false;
         if (posed && fino != null)
