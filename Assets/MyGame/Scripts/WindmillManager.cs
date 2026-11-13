@@ -21,6 +21,14 @@ public class WindmillManager : MonoBehaviour
     private bool allWindmillsLocked = false;
 
     public Renderer glowingResultCube;
+    [SerializeField] private Renderer mixingColorFace;
+    [SerializeField] private Renderer mixingLightRim;
+    private MaterialPropertyBlock mixingColorFaceProperties;
+    private MaterialPropertyBlock mixingLightRimProperties;
+    [Header("Leiser Magieklang")]
+    [SerializeField] private AudioClip worldColorMagic;
+    [SerializeField, Range(0f, 1f)] private float worldColorMagicVolume = 0.28f;
+    private AudioSource worldColorMagicSource;
 
     [Header("ParticleSystems")]
     public ParticleSystem particlesTop;
@@ -55,6 +63,7 @@ public class WindmillManager : MonoBehaviour
 
     private void Awake()
     {
+        UpdateMixingColorFace();
         if (lighthouseRoof == null && lighthouseRoot != null)
         {
             foreach (Transform part in lighthouseRoot.GetComponentsInChildren<Transform>(true))
@@ -107,6 +116,7 @@ public class WindmillManager : MonoBehaviour
 
     private void UpdateColors()
     {
+        UpdateMixingColorFace();
         foreach (GameObject obj in objectsToColor)
         {
             if (obj == null) continue;
@@ -118,14 +128,29 @@ public class WindmillManager : MonoBehaviour
             }
         }
 
-        if (glowingResultCube != null)
-        {
-            glowingResultCube.material.color = windmillColor;
+    }
 
-            Color emissionColor = windmillColor;
-            glowingResultCube.material.SetColor("_EmissionColor", emissionColor);
-            glowingResultCube.material.EnableKeyword("_EMISSION");
-        }
+    private void UpdateMixingColorFace()
+    {
+        if (mixingColorFace == null) return;
+        if (mixingColorFaceProperties == null) mixingColorFaceProperties = new MaterialPropertyBlock();
+        mixingColorFace.GetPropertyBlock(mixingColorFaceProperties);
+        Color color = windmillColor;
+        color.a = 1f;
+        mixingColorFaceProperties.SetColor("_BaseColor", color);
+        mixingColorFace.SetPropertyBlock(mixingColorFaceProperties);
+        UpdateMixingRim(color, 1f);
+    }
+
+    private void UpdateMixingRim(Color color, float brightness)
+    {
+        if (mixingLightRim == null) return;
+        if (mixingLightRimProperties == null) mixingLightRimProperties = new MaterialPropertyBlock();
+        mixingLightRim.GetPropertyBlock(mixingLightRimProperties);
+        Color glow = Color.Lerp(color, new Color(0.45f, 0.65f, 0.8f), 0.2f) * (0.65f * brightness);
+        glow.a = 1f;
+        mixingLightRimProperties.SetColor("_BaseColor", glow);
+        mixingLightRim.SetPropertyBlock(mixingLightRimProperties);
     }
 
     public void HideStartScreens()
@@ -139,6 +164,7 @@ public class WindmillManager : MonoBehaviour
         ResetReveal();
         if (_cgsa != null) _cgsa.ResetSelectedColor();
         windmillColor = new Color32(0, 0, 0, 255);
+        UpdateMixingColorFace();
 
         foreach (var windmill in windmills)
         {
@@ -180,6 +206,17 @@ public class WindmillManager : MonoBehaviour
         if (worldColorController == null)
             worldColorController = FindFirstObjectByType<WorldColorController>();
         if (worldColorController != null) worldWasGrayscale = worldColorController.IsGrayscale;
+        if (mixingLightRim != null)
+        {
+            float flashTime = 0f;
+            while (flashTime < 0.45f)
+            {
+                UpdateMixingRim(mixedColor, 1f + Mathf.Sin(flashTime / 0.45f * Mathf.PI) * 1.8f);
+                flashTime += Time.unscaledDeltaTime;
+                yield return null;
+            }
+            UpdateMixingRim(mixedColor, 1f);
+        }
         if (pipeColorPulse != null)
             yield return pipeColorPulse.Play(mixedColor,
                 glowingResultCube != null ? glowingResultCube.bounds.center : transform.position);
@@ -187,6 +224,7 @@ public class WindmillManager : MonoBehaviour
         Vector3 waveOrigin = lighthouseRoot != null ? lighthouseRoot.position : transform.position;
         BeginLampGlow(mixedColor);
         bool worldWave = worldColorController != null && worldColorController.BeginColorWave(waveOrigin, mixedColor, flowersToColor);
+        PlayWorldColorMagic();
         flowerMaterials.Clear();
         flowerStartColors.Clear();
         if (!worldWave)
@@ -249,6 +287,7 @@ public class WindmillManager : MonoBehaviour
 
     public void ResetReveal()
     {
+        if (worldColorMagicSource != null) worldColorMagicSource.Stop();
         ResetLampGlow();
         if (pipeColorPulse != null) pipeColorPulse.ResetPulse();
         if (lighthouseRoof != null) lighthouseRoof.localPosition = roofStartPosition;
@@ -320,6 +359,24 @@ public class WindmillManager : MonoBehaviour
     {
         ResetLampGlow();
         if (lampLight != null) Destroy(lampLight.gameObject);
+        if (worldColorMagicSource != null) Destroy(worldColorMagicSource.gameObject);
+    }
+
+    private void PlayWorldColorMagic()
+    {
+        if (worldColorMagic == null) return;
+        if (worldColorMagicSource == null)
+        {
+            GameObject audioObject = new GameObject("WorldColorMagicAudio");
+            audioObject.transform.SetParent(transform, false);
+            worldColorMagicSource = audioObject.AddComponent<AudioSource>();
+            worldColorMagicSource.playOnAwake = false;
+            worldColorMagicSource.spatialBlend = 0f;
+            worldColorMagicSource.loop = false;
+        }
+        worldColorMagicSource.clip = worldColorMagic;
+        worldColorMagicSource.volume = worldColorMagicVolume;
+        worldColorMagicSource.Play();
     }
 
     private void UpdateWallColor()

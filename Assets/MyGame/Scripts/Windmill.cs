@@ -62,7 +62,12 @@ public class Windmill : MonoBehaviour
 
     private void Update()
     {
-        if (gameManager != null && !gameManager.WindmillsActive) return;
+        if (gameManager != null && !gameManager.WindmillsActive)
+        {
+            StopOperationAudio();
+            ResetScale();
+            return;
+        }
         UpdateUI();
         UpdateVisuals();
 
@@ -97,6 +102,18 @@ public class Windmill : MonoBehaviour
             if (windmillEngine.isPlaying) windmillEngine.Stop();
         }
     }
+
+    public void StopOperationAudio()
+    {
+        if (windmillEngine != null) windmillEngine.Stop();
+        if (SoundScript != null)
+        {
+            SoundScript.StopAndReset();
+            SoundScript.enabled = false;
+        }
+    }
+
+    private void OnDisable() => StopOperationAudio();
 
     private void UpdateVisuals()
     {
