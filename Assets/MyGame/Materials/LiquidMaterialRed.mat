@@ -53,7 +53,7 @@ Material:
     - _WobbleZ: 0
     m_Colors:
     - _BottomColor: {r: 1, g: 0.051886797, b: 0.051886797, a: 1}
-    - _FillAmount: {r: 0, g: 0.467, b: 0, a: 0}
+    - _FillAmount: {r: 0, g: -0.79, b: 0, a: 0}
     - _FoamColor: {r: 1, g: 0.2971698, b: 0.2971698, a: 1}
     - _Rim_Color: {r: 0.8773585, g: 0.74991894, b: 0, a: 1}
     - _TopColor: {r: 0, g: 1, b: 0, a: 1}

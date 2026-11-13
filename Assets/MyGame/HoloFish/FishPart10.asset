@@ -1,0 +1,106 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!43 &4300000
+Mesh:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: FishPart10
+  serializedVersion: 12
+  m_SubMeshes:
+  - serializedVersion: 2
+    firstByte: 0
+    indexCount: 24
+    topology: 0
+    baseVertex: 0
+    firstVertex: 0
+    vertexCount: 9
+    localAABB:
+      m_Center: {x: -0.32363179, y: -0.13359284, z: 0.01614192}
+      m_Extent: {x: 0.01254228, y: 0.00030833, z: 0.00144607}
+  m_BindPose: []
+  m_BoneNameHashes: 
+  m_RootBoneNameHash: 0
+  m_BonesAABB: []
+  m_VariableBoneCountWeights: 
+  m_MeshCompression: 0
+  m_IsReadable: 1
+  m_KeepVertices: 1
+  m_KeepIndices: 1
+  m_IndexFormat: 0
+  m_IndexBuffer: 000002000100000003000200020004000100040005000100020006000400020007000600020003000700030008000700
+  m_VertexData:
+    serializedVersion: 3
+    m_VertexCount: 9
+    m_Channels:
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 3
+    - stream: 0
+      offset: 12
+      format: 0
+      dimension: 3
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 24
+      format: 0
+      dimension: 2
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    m_DataSize: 288
+    _typelessdata: 7a68a1bec0a208bee0c6703c000000000000803f0000008002b4fb3e0034933a3c06a3bebc7b08bee0ac853c000000000000803f000000801d94fa3e00ed193b4e24a6be13a508be807e843c000000000000803f000000804e74f83e00ed193b2047a6bec71a09be8043753c000000000000803f000000805154f83e0056b33acaf3a4be527d08be70808a3c000000000000803f000000803954f93e000e3a3b20479fbe641d09be00448f3c000000000000803f00000080e213fd3e000e3a3b6ed9aabedca508beb014903c000000000000803f000000809754f53e003e6a3b8efcaabe7d1509bed0a6863c000000000000803f000000809a34f53e00fd293b021facbe94c908be2007793c000000000000803f00000080ae54f43e0096f33a
+  m_LocalAABB:
+    m_Center: {x: -0.32363179, y: -0.13359284, z: 0.01614192}
+    m_Extent: {x: 0.01254228, y: 0.00030833, z: 0.00144607}
+  m_MeshUsageFlags: 0
+  m_CookingOptions: 30
+  m_MeshMetrics[0]: 1
+  m_MeshMetrics[1]: 1
+  m_StreamData:
+    serializedVersion: 2
+    offset: 0
+    size: 0
+    path: 

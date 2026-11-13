@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/MyGame/Scenes/VersionOverview.unity
+    guid: 31966a9f13aa4cfc8ce89825c1f155c9
+  - enabled: 1
     path: Assets/MyGame/Scenes/WindmillsRGB.unity
     guid: 1c3a8c0455a1c9844b86404fb1f0d1a6
   - enabled: 1
@@ -17,6 +20,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/MyGame/Scenes/ModiDesktop.unity
     guid: 3b35da1c098b12640b0bf0bf2be88484
+  - enabled: 1
+    path: Assets/Versions/PGV1/MyGame/Scenes/PGV1_BallonScene.unity
+    guid: c39cfd1ee00a543ea0b8aa96b2b72190
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 1a4c68ca72a83449f938d669337cb305, type: 2}
