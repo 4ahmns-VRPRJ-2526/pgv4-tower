@@ -26,6 +26,9 @@ public class WindmillManager : MonoBehaviour
 
     private void Start()
     {
+        StartScreenHandHint.AttachTo(verticalStartCanvas);
+        StartScreenHandHint.AttachTo(horizontalStartCanvas);
+
         resolutionWidth = Screen.width;
         resolutionHeight = Screen.height;
 
