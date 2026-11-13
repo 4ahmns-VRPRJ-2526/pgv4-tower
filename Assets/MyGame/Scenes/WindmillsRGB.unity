@@ -7512,7 +7512,7 @@ GameObject:
   - component: {fileID: 1209771507}
   - component: {fileID: 1209771508}
   m_Layer: 0
-  m_Name: Pipe2
+  m_Name: Pipegreen
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11211,7 +11211,7 @@ GameObject:
   - component: {fileID: 786512299}
   - component: {fileID: 786512300}
   m_Layer: 0
-  m_Name: Pipe3
+  m_Name: Pipeblue
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13943,7 +13943,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: b6f656a2171d54e04b7c2f90d67fa793, type: 2}
+  - {fileID: 2100000, guid: 0b4a9846b53260c48991a9a8c83261cb, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -15792,6 +15792,60 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &1107379835
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1107379837}
+  - component: {fileID: 1107379836}
+  m_Layer: 0
+  m_Name: WorldColorController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1107379836
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1107379835}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1f80e3d7b96452a9e107f632ab8d405, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WorldColorController
+  collectOnStart: 1
+  excludedRoots: []
+  excludedNameParts:
+  - windmill
+  - pipe
+  - rohr
+  - lightcube
+  startInGrayscale: 1
+  grayscaleMaterial: {fileID: 0}
+  environmentRenderers: []
+--- !u!4 &1107379837
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1107379835}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 3.34948, y: 0, z: -16.98696}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1110323106
 GameObject:
   m_ObjectHideFlags: 0
@@ -27351,7 +27405,7 @@ GameObject:
   - component: {fileID: 1462734222}
   - component: {fileID: 1462734223}
   m_Layer: 0
-  m_Name: Pipe1
+  m_Name: Pipered
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -30531,7 +30585,7 @@ GameObject:
   - component: {fileID: 1814640695}
   - component: {fileID: 1814640696}
   m_Layer: 0
-  m_Name: Pipe3 (1)
+  m_Name: PipeLigthouse
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -50244,3 +50298,4 @@ SceneRoots:
   - {fileID: 1057819475}
   - {fileID: 1270288640}
   - {fileID: 382257586}
+  - {fileID: 1107379837}
