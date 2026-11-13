@@ -9,6 +9,9 @@ public sealed class StartScreenHandHint : MonoBehaviour, IPointerDownHandler
     [SerializeField, Min(0f)] private float repeatDelay = 4f;
     [SerializeField, Min(1f)] private float travelDistance = 600f;
     [SerializeField, Min(0f)] private float tapDepth = 2f;
+    [SerializeField] private Button[] alternateTargets = new Button[0];
+    private int targetIndex = -1;
+    private bool animationStarted;
 
     private const float EnterDuration = 1.8f;
     private const float HoldDuration = 0.6f;
@@ -23,6 +26,8 @@ public sealed class StartScreenHandHint : MonoBehaviour, IPointerDownHandler
     private Canvas canvas;
     private Button button;
     private Vector3 targetPosition;
+    private Vector3 targetScale;
+    private bool overlayCanvas;
     private float nextAnimationTime;
     private bool wasVisible;
     private bool dismissed;
@@ -56,8 +61,10 @@ public sealed class StartScreenHandHint : MonoBehaviour, IPointerDownHandler
         if (hand != null) return;
         hand = handTransform;
         button = continueButton;
-        canvas = GetComponentInParent<Canvas>();
+        canvas = GetComponentInParent<Canvas>(true);
         targetPosition = hand.localPosition;
+        targetScale = hand.localScale;
+        overlayCanvas = canvas != null && canvas.renderMode == RenderMode.ScreenSpaceOverlay;
         sprites = hand.GetComponentsInChildren<SpriteRenderer>(true);
         spriteColors = new Color[sprites.Length];
         for (int i = 0; i < sprites.Length; i++) spriteColors[i] = sprites[i].color;
@@ -107,10 +114,21 @@ public sealed class StartScreenHandHint : MonoBehaviour, IPointerDownHandler
         if (elapsed >= CycleDuration)
         {
             Hide();
+            animationStarted = false;
             nextAnimationTime = Time.unscaledTime + repeatDelay;
             return;
         }
 
+
+        if (!animationStarted)
+        {
+            if (alternateTargets.Length > 0 && !ChooseNextTarget())
+            {
+                nextAnimationTime = Time.unscaledTime + repeatDelay;
+                return;
+            }
+            animationStarted = true;
+        }
 
         float zOffset;
         if (elapsed < EnterDuration)
@@ -127,7 +145,14 @@ public sealed class StartScreenHandHint : MonoBehaviour, IPointerDownHandler
             float phase = (elapsed - EnterDuration - HoldDuration - TapDuration) / ExitDuration;
             zOffset = -travelDistance * Smooth(phase);
         }
-        hand.localPosition = targetPosition + Vector3.forward * zOffset;
+        if (overlayCanvas)
+        {
+            // Overlay UI has no visible Z perspective: approach from below with a small scale change.
+            hand.localPosition = targetPosition + (zOffset > 0f
+                ? Vector3.down * zOffset : new Vector3(-zOffset * 0.25f, zOffset, 0f));
+            hand.localScale = targetScale * (1f + Mathf.Clamp01(-zOffset / travelDistance) * 0.25f);
+        }
+        else hand.localPosition = targetPosition + Vector3.forward * zOffset;
         // Fade only at the outer end of the Z travel so the text is fully clear in pauses.
         SetAlpha(1f - Smooth(Mathf.InverseLerp(0.7f, 1f, Mathf.Abs(zOffset) / travelDistance)));
     }
@@ -139,7 +164,45 @@ public sealed class StartScreenHandHint : MonoBehaviour, IPointerDownHandler
     private void RestartDelay()
     {
         Hide();
+        animationStarted = false;
         nextAnimationTime = Time.unscaledTime + idleDelay;
+    }
+
+    private bool ChooseNextTarget()
+    {
+        Button fallback = null;
+        for (int step = 1; step <= alternateTargets.Length; step++)
+        {
+            int index = (targetIndex + step) % alternateTargets.Length;
+            Button candidate = alternateTargets[index];
+            if (!TargetIsVisible(candidate)) continue;
+            fallback = candidate;
+            if (candidate == button) continue;
+            targetIndex = index;
+            button.onClick.RemoveListener(Dismiss);
+            button = candidate;
+            button.onClick.AddListener(Dismiss);
+            hand.SetParent(button.transform, false);
+            hand.localPosition = targetPosition;
+            hand.localScale = targetScale;
+            return true;
+        }
+        return fallback != null && fallback == button;
+    }
+
+    private bool TargetIsVisible(Button candidate)
+    {
+        if (candidate == null || !candidate.isActiveAndEnabled || !candidate.IsInteractable()) return false;
+        RectTransform rect = candidate.transform as RectTransform;
+        if (rect == null) return false;
+        Camera camera = overlayCanvas ? null : canvas.worldCamera;
+        Vector2 screenPoint = RectTransformUtility.WorldToScreenPoint(camera, rect.TransformPoint(rect.rect.center));
+        if (!new Rect(0, 0, Screen.width, Screen.height).Contains(screenPoint)) return false;
+        foreach (RectMask2D mask in candidate.GetComponentsInParent<RectMask2D>())
+            if (mask.isActiveAndEnabled && !RectTransformUtility.RectangleContainsScreenPoint(mask.rectTransform, screenPoint, camera)) return false;
+        foreach (Mask mask in candidate.GetComponentsInParent<Mask>())
+            if (mask.isActiveAndEnabled && !RectTransformUtility.RectangleContainsScreenPoint(mask.rectTransform, screenPoint, camera)) return false;
+        return true;
     }
 
     private void Dismiss()
@@ -152,6 +215,7 @@ public sealed class StartScreenHandHint : MonoBehaviour, IPointerDownHandler
     {
         SetAlpha(0f);
         if (hand != null) hand.localPosition = targetPosition;
+        if (hand != null) hand.localScale = targetScale;
     }
 
     private void SetAlpha(float alpha)

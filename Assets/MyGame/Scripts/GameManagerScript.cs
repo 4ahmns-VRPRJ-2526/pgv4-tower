@@ -260,7 +260,7 @@ public class GameManagerScript : MonoBehaviour
     {
         if (numberOfNameGenerations > 0 && !string.IsNullOrEmpty(randomName))
         {
-            SetColorMenuNameTexts(randomName + ",");
+            SetColorMenuNameTexts(randomName);
 
             if (dataLogger != null)
             {
@@ -450,6 +450,15 @@ public class GameManagerScript : MonoBehaviour
     public void RestartGame()
     {
         if (!resultOverviewVisible) return;
+        resultOverviewVisible = false;
+        foreach (Button button in resultRestartButtons)
+            if (button != null) button.interactable = false;
+        finishRoutine = StartCoroutine(RestartAfterDeparture());
+    }
+
+    private IEnumerator RestartAfterDeparture()
+    {
+        if (wma != null) yield return wma.DepartForNewRound();
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 

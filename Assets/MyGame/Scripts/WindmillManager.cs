@@ -55,6 +55,7 @@ public class WindmillManager : MonoBehaviour
     [SerializeField] private GameObject[] flowersToColor = new GameObject[0];
     [SerializeField] private WorldColorController worldColorController;
     [SerializeField] private PipeColorPulse pipeColorPulse;
+    [SerializeField] private PepperGhostFinale pepperGhostFinale;
     private bool worldWasGrayscale;
     private Vector3 roofStartPosition;
     private bool resultRevealed;
@@ -206,6 +207,7 @@ public class WindmillManager : MonoBehaviour
         if (worldColorController == null)
             worldColorController = FindFirstObjectByType<WorldColorController>();
         if (worldColorController != null) worldWasGrayscale = worldColorController.IsGrayscale;
+        if (pepperGhostFinale != null) yield return pepperGhostFinale.ReceiveColor(mixedColor);
         if (mixingLightRim != null)
         {
             float flashTime = 0f;
@@ -263,6 +265,7 @@ public class WindmillManager : MonoBehaviour
         }
         ApplyReveal(1f, endPosition, mixedColor);
         ApplyLampGlow(lampIdleGlow);
+        if (pepperGhostFinale != null) yield return pepperGhostFinale.Celebrate(mixedColor);
         if (resultHoldDuration > 0f) yield return new WaitForSecondsRealtime(resultHoldDuration);
     }
 
@@ -287,6 +290,7 @@ public class WindmillManager : MonoBehaviour
 
     public void ResetReveal()
     {
+        if (pepperGhostFinale != null) pepperGhostFinale.ResetFinale();
         if (worldColorMagicSource != null) worldColorMagicSource.Stop();
         ResetLampGlow();
         if (pipeColorPulse != null) pipeColorPulse.ResetPulse();
@@ -295,6 +299,11 @@ public class WindmillManager : MonoBehaviour
         if (resultRevealed && worldColorController != null)
             worldColorController.SetGrayscale(worldWasGrayscale);
         resultRevealed = false;
+    }
+
+    public IEnumerator DepartForNewRound()
+    {
+        if (pepperGhostFinale != null) yield return pepperGhostFinale.FlyAway();
     }
 
     private void BeginLampGlow(Color color)
