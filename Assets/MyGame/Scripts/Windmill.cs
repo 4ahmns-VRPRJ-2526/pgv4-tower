@@ -26,6 +26,13 @@ public class Windmill : MonoBehaviour
 
     [Header("Pulse Animation")]
     private Vector3 originalScale;
+    private GameManagerScript gameManager;
+
+    private void Awake()
+    {
+        gameManager = FindFirstObjectByType<GameManagerScript>();
+        originalScale = transform.localScale;
+    }
     [SerializeField] private float pulseSpeed = 2f;
     [SerializeField] private float pulseMagnitude = 0.05f;
 
@@ -55,6 +62,7 @@ public class Windmill : MonoBehaviour
 
     private void Update()
     {
+        if (gameManager != null && !gameManager.WindmillsActive) return;
         UpdateUI();
         UpdateVisuals();
 
@@ -167,6 +175,7 @@ public class Windmill : MonoBehaviour
 
     public void SelectWindmill()
     {
+        if (gameManager != null && !gameManager.WindmillsActive) return;
         isWindmillSelected = true;
         if (!lampLight.isActiveAndEnabled)
         {

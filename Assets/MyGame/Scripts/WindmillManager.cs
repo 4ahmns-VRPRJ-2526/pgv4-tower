@@ -24,7 +24,7 @@ public class WindmillManager : MonoBehaviour
     public ParticleSystem particlesTop;
     public GameObject[] objectsToColor;
 
-    private void Start()
+    private void Awake()
     {
         StartScreenHandHint.AttachTo(verticalStartCanvas);
         StartScreenHandHint.AttachTo(horizontalStartCanvas);
@@ -50,12 +50,18 @@ public class WindmillManager : MonoBehaviour
             return;
         }
 
+    }
+
+    public void BeginGameplay()
+    {
+        if (currentSelectedWindmill != null || windmills.Length == 0) return;
         currentSelectedWindmill = windmills[0];
         currentSelectedWindmill.SelectWindmill();
     }
 
     private void Update()
     {
+        if (_cgsa != null && !_cgsa.WindmillsActive) return;
         UpdateWallColor();
         CheckIfAllLocked();
         UpdateColors();
@@ -84,8 +90,15 @@ public class WindmillManager : MonoBehaviour
         }
     }
 
+    public void HideStartScreens()
+    {
+        if (verticalStartCanvas != null) verticalStartCanvas.SetActive(false);
+        if (horizontalStartCanvas != null) horizontalStartCanvas.SetActive(false);
+    }
+
     public void ResetScene()
     {
+        if (_cgsa != null) _cgsa.ResetSelectedColor();
         windmillColor = new Color32(0, 0, 0, 255);
 
         foreach (var windmill in windmills)
@@ -93,8 +106,7 @@ public class WindmillManager : MonoBehaviour
             windmill.ResetWindmill();
         }
 
-        currentSelectedWindmill = windmills[0];
-        currentSelectedWindmill.SelectWindmill();
+        currentSelectedWindmill = null;
     }
 
     private void UpdateWallColor()
@@ -115,6 +127,7 @@ public class WindmillManager : MonoBehaviour
 
     public void LockAllExcept(Windmill clickedWindmill)
     {
+        if (_cgsa != null && !_cgsa.WindmillsActive) return;
         if (clickedWindmill == currentSelectedWindmill)
         {
             clickedWindmill.ToggleRotationMode();

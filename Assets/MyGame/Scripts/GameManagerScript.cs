@@ -30,7 +30,7 @@ public class GameManagerScript : MonoBehaviour
     public TMP_Text generationsLeftText;
     public TMP_Text generationsLeftTextLandscape;
     private int numberOfNameGenerations;
-    private int numberOfGenerationsLeft;
+    private float nextNameRollTime;
     public int numberOfNameGenerationsIsLimitedTo = 3;
     public Button generateNameButton;
     public TMP_Text generateNameButtonText;
@@ -94,6 +94,8 @@ public class GameManagerScript : MonoBehaviour
     [Header("SelectedColor")]
     public Image selectedColorEmpty;
     public GameObject selectedColorCanvas;
+    private bool hasSelectedColor;
+    public bool WindmillsActive { get; private set; }
     private bool mixingPhaseActive = false;
 
     // Liste der männlichen Adjektive
@@ -129,12 +131,24 @@ public class GameManagerScript : MonoBehaviour
         "Käuzchen", "Rüsselkäfer"
     };
 
+    private void Awake()
+    {
+        numberOfNameGenerationsIsLimitedTo = 3;
+        ResetSelectedColor();
+    }
+
+    public void ResetSelectedColor()
+    {
+        hasSelectedColor = false;
+        WindmillsActive = false;
+        SetCanvasActive(selectedColorCanvas, false);
+    }
+
     void Start()
     {
         ConfigureRandomNameControls();
 
         numberOfNameGenerations = 0;
-        numberOfGenerationsLeft = numberOfNameGenerationsIsLimitedTo;
         UpdateGenerationTexts();
         SetChooseButtons(false);
 
@@ -189,6 +203,8 @@ public class GameManagerScript : MonoBehaviour
     public void ActivateRandomName()
     {
         ConfigureRandomNameControls();
+        if (wma == null) wma = FindFirstObjectByType<WindmillManager>();
+        if (wma != null) wma.HideStartScreens();
 
         bool horizontal = ItIsHorizontal();
         SetCanvasActive(randomNameCanvas, !horizontal);
@@ -197,36 +213,32 @@ public class GameManagerScript : MonoBehaviour
         SetGenerateButtons(numberOfNameGenerations < numberOfNameGenerationsIsLimitedTo);
         SetChooseButtons(numberOfNameGenerations > 0 && !string.IsNullOrEmpty(randomName));
         UpdateGenerationTexts();
-        SetRandomNameTexts(randomName);
+        if (numberOfNameGenerations == 0) ChooseRandomName();
+        else SetRandomNameTexts(randomName);
 
-        GameObject callerx = EventSystem.current.currentSelectedGameObject;
-
-        if (callerx != null)
-        {
-            callerx.SetActive(false);
-        }
     }
     public void ChooseRandomName()
     {
-        Debug.Log("Choooose");
+        if (Time.unscaledTime < nextNameRollTime) return;
+        nextNameRollTime = Time.unscaledTime + 0.35f;
         if (numberOfNameGenerations < numberOfNameGenerationsIsLimitedTo)
         {
             randomName = adjektive[Random.Range(0, adjektive.Length)] + " " + tiere[Random.Range(0, tiere.Length)];
             SetRandomNameTexts(randomName);
 
             numberOfNameGenerations += 1;
-            numberOfGenerationsLeft = numberOfNameGenerationsIsLimitedTo - numberOfNameGenerations;
             UpdateGenerationTexts();
 
             if (numberOfNameGenerations > 0)
             {
-                SetGenerateButtonTexts("Neuen Namen Würfeln");
+                SetGenerateButtonTexts("Anderer Name");
             }
         }
 
         if (numberOfNameGenerations >= numberOfNameGenerationsIsLimitedTo)
         {
             SetGenerateButtons(false);
+            SetGenerateButtonTexts("Alle 3 Namen gew\u00fcrfelt");
         }
 
         SetChooseButtons(numberOfNameGenerations > 0 && !string.IsNullOrEmpty(randomName));
@@ -279,12 +291,14 @@ public class GameManagerScript : MonoBehaviour
     {
         if (selectedColorCanvas != null)
         {
-            selectedColorCanvas.SetActive(true);
+            selectedColorCanvas.SetActive(hasSelectedColor);
         }
     }
 
     public void SelectColorGoal(int a)
     {
+        if (a < 0 || a >= _colorsArray.Length) return;
+
         GameObject caller = EventSystem.current.currentSelectedGameObject;
         if (caller != null && selectedColorEmpty != null)
         {
@@ -308,16 +322,17 @@ public class GameManagerScript : MonoBehaviour
 
         SetColorMenuNameTexts("");
 
-        if (selectedColorCanvas != null)
-        {
-            selectedColorCanvas.SetActive(true);
-        }
-
         _goalColour = _colorsArray[a];
+        hasSelectedColor = true;
+        ActivateSelectedColorCanvas();
     }
     // erst nachden PG fertigredet werden Windmills aktivieren & Im TextWait & DisabledInfoText auch ActivateWindmills Methode eingefügt falls User Text wegklickt = WIndmills auch gleich aktiviert
     public void ActivateWindmills()
     {
+        if (!hasSelectedColor) return;
+
+        WindmillsActive = true;
+        wma.BeginGameplay();
         wma.particlesTop.enableEmission = true;
 
         foreach (GameObject obj in objectsWithScripts)
@@ -348,7 +363,7 @@ public class GameManagerScript : MonoBehaviour
         {
             stateInfo = ghostAnimator.GetCurrentAnimatorStateInfo(0);
 
-            if (!hasShownText &&
+            if (hasSelectedColor && !hasShownText &&
                 stateInfo.IsName("Anim2") &&
                 stateInfo.normalizedTime >= 1.0f)
             {
@@ -656,16 +671,16 @@ public class GameManagerScript : MonoBehaviour
     }
     private void UpdateGenerationTexts()
     {
-        string value = numberOfGenerationsLeft.ToString();
+        string value = "Name " + Mathf.Max(1, numberOfNameGenerations) + " von 3";
 
         if (generationsLeftText != null)
         {
-            generationsLeftText.text = value + " übrig";
+            generationsLeftText.text = value;
         }
 
         if (generationsLeftTextLandscape != null)
         {
-            generationsLeftTextLandscape.text = value + " übrig";
+            generationsLeftTextLandscape.text = value;
         }
     }
 

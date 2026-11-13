@@ -10,10 +10,17 @@ public class RotorHub : MonoBehaviour
 
     public float currentSpeed = 0f; // Current rotation speed
     public float constRotationSpeed = -1f;
+    private GameManagerScript gameManager;
+
+    private void Awake()
+    {
+        gameManager = FindFirstObjectByType<GameManagerScript>();
+    }
     
 
     public void RotateRotor(bool windmillSelected)
     {
+        if (gameManager != null && !gameManager.WindmillsActive) return;
         if (!windmillSelected)
         {
             if (constRotationSpeed != -1)
