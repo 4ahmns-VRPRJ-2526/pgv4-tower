@@ -22,6 +22,14 @@ public class WorldColorController : MonoBehaviour
     private Material generatedMaterial;
     private bool initialized;
     private bool isGrayscale; 
+    public bool IsGrayscale => isGrayscale;
+    [Header("Lichtwelle beim Abschluss")]
+    [SerializeField] private Material colorWaveMaterial;
+    [SerializeField, Min(0.1f)] private float waveSoftness = 5f;
+    private readonly List<Material> waveMaterials = new List<Material>();
+    private readonly HashSet<Renderer> revealPreservedRenderers = new HashSet<Renderer>();
+    private bool waveActive;
+    private float waveRadius;
 
     private void Start()
     {
@@ -94,12 +102,17 @@ public class WorldColorController : MonoBehaviour
     private void Update()
     {
         // Also permits toggling the checkbox in the Inspector during Play Mode.
-        if (isGrayscale != startInGrayscale)
+        if (!waveActive && isGrayscale != startInGrayscale)
             SetGrayscale(startInGrayscale);
     }
 
     public void SetGrayscale(bool enabled)
     {
+        if (waveActive)
+        {
+            RestoreMaterials();
+            isGrayscale = false;
+        }
         startInGrayscale = enabled;
         if (!Application.isPlaying) return;
 
@@ -153,6 +166,88 @@ public class WorldColorController : MonoBehaviour
         foreach (KeyValuePair<Renderer, Material[]> entry in originalMaterials)
             if (entry.Key != null) entry.Key.sharedMaterials = entry.Value;
         originalMaterials.Clear();
+        foreach (Material material in waveMaterials) if (material != null) Destroy(material);
+        waveMaterials.Clear();
+        waveActive = false;
+        revealPreservedRenderers.Clear();
+    }
+
+    public bool BeginColorWave(Vector3 origin, Color mixedColor, GameObject[] flowers)
+    {
+        if (colorWaveMaterial == null || !colorWaveMaterial.shader.isSupported)
+        {
+            Debug.LogWarning("WorldColorController: Lichtwellen-Material fehlt oder Shader wird nicht unterstützt; direkter Farbwechsel.", this);
+            return false;
+        }
+        var flowerRenderers = new HashSet<Renderer>();
+        foreach (GameObject flower in flowers)
+            if (flower != null)
+                foreach (Renderer renderer in flower.GetComponentsInChildren<Renderer>(true)) flowerRenderers.Add(renderer);
+        if (originalMaterials.Count == 0)
+            foreach (Renderer renderer in environmentRenderers)
+                if (renderer != null && !revealPreservedRenderers.Contains(renderer) && !originalMaterials.ContainsKey(renderer))
+                    originalMaterials.Add(renderer, renderer.sharedMaterials);
+        waveRadius = waveSoftness;
+        foreach (var entry in originalMaterials)
+        {
+            if (entry.Key == null) continue;
+            Bounds bounds = entry.Key.bounds;
+            Vector2 delta = new Vector2(bounds.center.x - origin.x, bounds.center.z - origin.z);
+            waveRadius = Mathf.Max(waveRadius, delta.magnitude + new Vector2(bounds.extents.x, bounds.extents.z).magnitude);
+            Material[] materials = new Material[entry.Value.Length];
+            for (int i = 0; i < materials.Length; i++)
+            {
+                Material original = entry.Value[i];
+                Material material = new Material(colorWaveMaterial) { name = "World Color Wave (Runtime)" };
+                Color target = Color.white;
+                if (original != null)
+                {
+                    string colorProperty = original.HasProperty("_BaseColor") ? "_BaseColor" : "_Color";
+                    if (original.HasProperty(colorProperty)) target = original.GetColor(colorProperty);
+                    string textureProperty = original.HasProperty("_BaseMap") ? "_BaseMap" : "_MainTex";
+                    if (original.HasProperty(textureProperty))
+                    {
+                        material.SetTexture("_BaseMap", original.GetTexture(textureProperty));
+                        material.SetTextureScale("_BaseMap", original.GetTextureScale(textureProperty));
+                        material.SetTextureOffset("_BaseMap", original.GetTextureOffset(textureProperty));
+                    }
+                }
+                if (flowerRenderers.Contains(entry.Key)) target = mixedColor;
+                material.SetColor("_BaseColor", target);
+                material.SetColor("_GrayColor", isGrayscale ? new Color(0.65f, 0.65f, 0.65f) : target);
+                materials[i] = material;
+                waveMaterials.Add(material);
+            }
+            entry.Key.sharedMaterials = materials;
+        }
+        Shader.SetGlobalVector("_WorldWaveOrigin", origin);
+        Shader.SetGlobalColor("_WorldWaveColor", mixedColor);
+        Shader.SetGlobalFloat("_WorldWaveSoftness", waveSoftness);
+        waveActive = true;
+        UpdateColorWave(0f);
+        return true;
+    }
+
+    public void UpdateColorWave(float progress)
+    {
+        if (!waveActive) return;
+        Shader.SetGlobalFloat("_WorldWaveRadius", Mathf.Lerp(-waveSoftness, waveRadius + waveSoftness * 2f, Mathf.Clamp01(progress)));
+        float rise = Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(0f, 0.12f, progress));
+        float fade = 1f - Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(0.8f, 1f, progress));
+        Shader.SetGlobalFloat("_WorldWaveGlow", rise * fade);
+    }
+
+    public void FinishColorWave() => SetGrayscale(false);
+
+    public void PreserveRendererForReveal(Renderer renderer)
+    {
+        if (renderer == null) return;
+        revealPreservedRenderers.Add(renderer);
+        if (originalMaterials.TryGetValue(renderer, out Material[] materials))
+        {
+            renderer.sharedMaterials = materials;
+            originalMaterials.Remove(renderer);
+        }
     }
 
     private void OnDisable()

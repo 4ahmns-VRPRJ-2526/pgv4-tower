@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -24,8 +26,44 @@ public class WindmillManager : MonoBehaviour
     public ParticleSystem particlesTop;
     public GameObject[] objectsToColor;
 
+    [Header("Abschluss: Leuchtturm und Blumen")]
+    [SerializeField] private Transform lighthouseRoot;
+    [SerializeField] private Transform lighthouseRoof;
+    [SerializeField] private string roofObjectName = "model_part5";
+    [Header("Leuchtturmlampe")]
+    [SerializeField] private Renderer lighthouseLamp;
+    [SerializeField] private string lampObjectName = "model_part1";
+    [SerializeField, Min(0f)] private float lampPeakGlow = 4f;
+    [SerializeField, Min(0f)] private float lampIdleGlow = 1.5f;
+    [SerializeField, Min(0f)] private float lampLightRange = 6f;
+    private Material[] lampOriginalMaterials;
+    private Material[] lampGlowMaterials;
+    private Light lampLight;
+    private Color lampColor;
+    [SerializeField, Min(0f)] private float roofLiftHeight = 2.5f;
+    [SerializeField, Min(0.1f)] private float revealDuration = 2.5f;
+    [SerializeField, Min(0.1f)] private float worldWaveDuration = 5.5f;
+    [SerializeField, Min(0f)] private float resultHoldDuration = 4f;
+    [SerializeField] private GameObject[] flowersToColor = new GameObject[0];
+    [SerializeField] private WorldColorController worldColorController;
+    [SerializeField] private PipeColorPulse pipeColorPulse;
+    private bool worldWasGrayscale;
+    private Vector3 roofStartPosition;
+    private bool resultRevealed;
+    private readonly List<Material> flowerMaterials = new List<Material>();
+    private readonly List<Color> flowerStartColors = new List<Color>();
+
     private void Awake()
     {
+        if (lighthouseRoof == null && lighthouseRoot != null)
+        {
+            foreach (Transform part in lighthouseRoot.GetComponentsInChildren<Transform>(true))
+                if (part.name == roofObjectName) { lighthouseRoof = part; break; }
+        }
+        if (lighthouseRoof != null) roofStartPosition = lighthouseRoof.localPosition;
+        if (lighthouseLamp == null && lighthouseRoot != null)
+            foreach (Transform part in lighthouseRoot.GetComponentsInChildren<Transform>(true))
+                if (part.name == lampObjectName) { lighthouseLamp = part.GetComponent<Renderer>(); break; }
         StartScreenHandHint.AttachTo(verticalStartCanvas);
         StartScreenHandHint.AttachTo(horizontalStartCanvas);
 
@@ -98,6 +136,7 @@ public class WindmillManager : MonoBehaviour
 
     public void ResetScene()
     {
+        ResetReveal();
         if (_cgsa != null) _cgsa.ResetSelectedColor();
         windmillColor = new Color32(0, 0, 0, 255);
 
@@ -107,6 +146,180 @@ public class WindmillManager : MonoBehaviour
         }
 
         currentSelectedWindmill = null;
+    }
+
+    public Color CaptureMixedColor()
+    {
+        CombineLightSpeed();
+        UpdateColors();
+        return windmillColor;
+    }
+
+    private void CacheVisibleFlowerMaterials()
+    {
+        flowerMaterials.Clear();
+        flowerStartColors.Clear();
+        foreach (GameObject flower in flowersToColor)
+        {
+            if (flower == null) continue;
+            foreach (Renderer renderer in flower.GetComponentsInChildren<Renderer>(true))
+                foreach (Material material in renderer.materials)
+                {
+                    if (flowerMaterials.Contains(material) ||
+                        (!material.HasProperty("_BaseColor") && !material.HasProperty("_Color"))) continue;
+                    flowerMaterials.Add(material);
+                    flowerStartColors.Add(ReadFlowerColor(material));
+                }
+        }
+    }
+
+    public IEnumerator RevealResult(Color mixedColor)
+    {
+        if (resultRevealed) yield break;
+        resultRevealed = true;
+        if (worldColorController == null)
+            worldColorController = FindFirstObjectByType<WorldColorController>();
+        if (worldColorController != null) worldWasGrayscale = worldColorController.IsGrayscale;
+        if (pipeColorPulse != null)
+            yield return pipeColorPulse.Play(mixedColor,
+                glowingResultCube != null ? glowingResultCube.bounds.center : transform.position);
+        mixedColor.a = 1f;
+        Vector3 waveOrigin = lighthouseRoot != null ? lighthouseRoot.position : transform.position;
+        BeginLampGlow(mixedColor);
+        bool worldWave = worldColorController != null && worldColorController.BeginColorWave(waveOrigin, mixedColor, flowersToColor);
+        flowerMaterials.Clear();
+        flowerStartColors.Clear();
+        if (!worldWave)
+        {
+            if (worldColorController != null) worldColorController.SetGrayscale(false);
+            CacheVisibleFlowerMaterials();
+        }
+        windmillColor = mixedColor;
+        if (lighthouseRoof == null)
+            Debug.LogWarning("Leuchtturmdach fehlt: Lighthouse Roof im WindmillManager zuweisen.", this);
+        Vector3 endPosition = roofStartPosition;
+        if (lighthouseRoof != null)
+            endPosition += lighthouseRoof.parent != null
+                ? lighthouseRoof.parent.InverseTransformVector(Vector3.up * roofLiftHeight)
+                : Vector3.up * roofLiftHeight;
+
+        float elapsed = 0f;
+        float totalDuration = worldWave ? Mathf.Max(revealDuration, worldWaveDuration + 0.25f) : revealDuration;
+        while (elapsed < totalDuration)
+        {
+            float amount = Mathf.SmoothStep(0f, 1f, elapsed / revealDuration);
+            ApplyReveal(amount, endPosition, mixedColor);
+            float rise = Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(0.15f, 1.4f, elapsed));
+            float settle = Mathf.SmoothStep(0f, 1f, Mathf.InverseLerp(revealDuration, totalDuration, elapsed));
+            ApplyLampGlow(rise * Mathf.Lerp(lampPeakGlow, lampIdleGlow, settle));
+            if (worldWave) worldColorController.UpdateColorWave(Mathf.Clamp01((elapsed - 0.25f) / worldWaveDuration));
+            elapsed += Time.unscaledDeltaTime;
+            yield return null;
+        }
+        if (worldWave)
+        {
+            worldColorController.UpdateColorWave(1f);
+            worldColorController.FinishColorWave();
+            // Restore real materials before applying the lasting mixed flower color.
+            CacheVisibleFlowerMaterials();
+        }
+        ApplyReveal(1f, endPosition, mixedColor);
+        ApplyLampGlow(lampIdleGlow);
+        if (resultHoldDuration > 0f) yield return new WaitForSecondsRealtime(resultHoldDuration);
+    }
+
+    private void ApplyReveal(float amount, Vector3 endPosition, Color mixedColor)
+    {
+        if (lighthouseRoof != null)
+            lighthouseRoof.localPosition = Vector3.Lerp(roofStartPosition, endPosition, amount);
+        for (int i = 0; i < flowerMaterials.Count; i++)
+            WriteFlowerColor(flowerMaterials[i], Color.Lerp(flowerStartColors[i], mixedColor, amount));
+    }
+
+    private static Color ReadFlowerColor(Material material)
+    {
+        return material.GetColor(material.HasProperty("_BaseColor") ? "_BaseColor" : "_Color");
+    }
+
+    private static void WriteFlowerColor(Material material, Color color)
+    {
+        if (material.HasProperty("_BaseColor")) material.SetColor("_BaseColor", color);
+        if (material.HasProperty("_Color")) material.SetColor("_Color", color);
+    }
+
+    public void ResetReveal()
+    {
+        ResetLampGlow();
+        if (pipeColorPulse != null) pipeColorPulse.ResetPulse();
+        if (lighthouseRoof != null) lighthouseRoof.localPosition = roofStartPosition;
+        for (int i = 0; i < flowerMaterials.Count; i++) WriteFlowerColor(flowerMaterials[i], flowerStartColors[i]);
+        if (resultRevealed && worldColorController != null)
+            worldColorController.SetGrayscale(worldWasGrayscale);
+        resultRevealed = false;
+    }
+
+    private void BeginLampGlow(Color color)
+    {
+        if (lighthouseLamp == null)
+        {
+            Debug.LogWarning("Leuchtturmlampe fehlt: Lighthouse Lamp im WindmillManager zuweisen.", this);
+            return;
+        }
+        if (worldColorController != null) worldColorController.PreserveRendererForReveal(lighthouseLamp);
+        lampOriginalMaterials = lighthouseLamp.sharedMaterials;
+        lampGlowMaterials = lighthouseLamp.materials;
+        lampColor = color;
+        lampColor.a = 1f;
+        foreach (Material material in lampGlowMaterials)
+        {
+            // Remove the baked blue tint from this lamp instance only.
+            if (material.HasProperty("_BaseMap")) material.SetTexture("_BaseMap", null);
+            if (material.HasProperty("_MainTex")) material.SetTexture("_MainTex", null);
+            WriteFlowerColor(material, lampColor);
+            material.EnableKeyword("_EMISSION");
+        }
+        if (lampLight == null)
+        {
+            GameObject lightObject = new GameObject("Leuchtturm-Farblicht");
+            lightObject.transform.SetParent(lighthouseRoot != null ? lighthouseRoot : transform, false);
+            lightObject.transform.position = lighthouseLamp.bounds.center;
+            lampLight = lightObject.AddComponent<Light>();
+            lampLight.type = LightType.Point;
+            lampLight.shadows = LightShadows.None;
+        }
+        lampLight.color = lampColor;
+        lampLight.range = lampLightRange;
+        ApplyLampGlow(0f);
+    }
+
+    private void ApplyLampGlow(float strength)
+    {
+        if (lampGlowMaterials == null) return;
+        foreach (Material material in lampGlowMaterials)
+            if (material != null && material.HasProperty("_EmissionColor"))
+                material.SetColor("_EmissionColor", lampColor * strength);
+        if (lampLight != null)
+        {
+            lampLight.intensity = strength * 0.6f;
+            lampLight.enabled = strength > 0f;
+        }
+    }
+
+    private void ResetLampGlow()
+    {
+        if (lighthouseLamp != null && lampOriginalMaterials != null)
+            lighthouseLamp.sharedMaterials = lampOriginalMaterials;
+        if (lampGlowMaterials != null)
+            foreach (Material material in lampGlowMaterials) if (material != null) Destroy(material);
+        lampGlowMaterials = null;
+        lampOriginalMaterials = null;
+        if (lampLight != null) lampLight.enabled = false;
+    }
+
+    private void OnDestroy()
+    {
+        ResetLampGlow();
+        if (lampLight != null) Destroy(lampLight.gameObject);
     }
 
     private void UpdateWallColor()

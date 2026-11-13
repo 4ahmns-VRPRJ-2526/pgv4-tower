@@ -81,6 +81,8 @@ public class GameManagerScript : MonoBehaviour
     [SerializeField] Image[] mixedBBars;
 
     [SerializeField] TMP_Text[] percentageTexts;
+    [SerializeField] TMP_Text[] resultFeedbackTexts = new TMP_Text[0];
+    [SerializeField] Button[] resultRestartButtons = new Button[0];
 
     public GameObject finishedGameCanvas;
     public GameObject finishedGameCanvasLandscape;
@@ -88,6 +90,8 @@ public class GameManagerScript : MonoBehaviour
     [SerializeField] DataLogger dataLogger;
 
     bool alreadyPulled = false;
+    private bool resultOverviewVisible;
+    private Coroutine finishRoutine;
     public int resolutionWidth, resolutionHeight;
     public bool screenHorizontal;
 
@@ -139,14 +143,22 @@ public class GameManagerScript : MonoBehaviour
 
     public void ResetSelectedColor()
     {
+        if (finishRoutine != null) StopCoroutine(finishRoutine);
+        finishRoutine = null;
+        alreadyPulled = false;
+        resultOverviewVisible = false;
+        SetCanvasActive(finishedGameCanvas, false);
+        SetCanvasActive(finishedGameCanvasLandscape, false);
         hasSelectedColor = false;
         WindmillsActive = false;
+        mixingPhaseActive = false;
         SetCanvasActive(selectedColorCanvas, false);
     }
 
     void Start()
     {
         ConfigureRandomNameControls();
+        foreach (Button button in resultRestartButtons) WireButton(button, RestartGame);
 
         numberOfNameGenerations = 0;
         UpdateGenerationTexts();
@@ -329,7 +341,7 @@ public class GameManagerScript : MonoBehaviour
     // erst nachden PG fertigredet werden Windmills aktivieren & Im TextWait & DisabledInfoText auch ActivateWindmills Methode eingefügt falls User Text wegklickt = WIndmills auch gleich aktiviert
     public void ActivateWindmills()
     {
-        if (!hasSelectedColor) return;
+        if (!hasSelectedColor || alreadyPulled) return;
 
         WindmillsActive = true;
         wma.BeginGameplay();
@@ -383,51 +395,14 @@ public class GameManagerScript : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.UpArrow) && mixingPhaseActive && !alreadyPulled)
+        if (Input.GetKeyDown(KeyCode.UpArrow) && WindmillsActive && mixingPhaseActive && !alreadyPulled)
         {
-            if (ItIsHorizontal())
-            {
-               finishedGameCanvasLandscape.SetActive(true);
-            }
-            else
-            {
-               finishedGameCanvas.SetActive(true);
-            }
-
-                achievedSphereParent.SetActive(true);
-            goalSphereParent.SetActive(true);
-
             alreadyPulled = true;
-
-            Color mixedColor = wma.windmillColor;
-            float similarity = ColorMatchUtility.CalculatePerceptualMatchPercent(
-                mixedColor,
-                _goalColour
-            );
-
-            if (dataLogger != null)
-            {
-                dataLogger.currentUserName = string.IsNullOrEmpty(randomName) ? dataLogger.currentUserName : randomName;
-                dataLogger.currentUserScore = similarity;
-                dataLogger.WriteNewDataToCSV();
-            }
-            else
-            {
-                Debug.LogWarning("GameManagerScript: No DataLogger assigned, score was not written.");
-            }
-
-            goalSphere.GetComponent<Renderer>().material.color = _goalColour;
-
-            achievedSphere.GetComponent<Renderer>().material.color =
-                mixedColor;
-
-            UpdateFinishedGameFeedback(_goalColour, mixedColor, similarity);
+            finishRoutine = StartCoroutine(FinishMixing());
         }
-        else if (Input.GetKeyDown(KeyCode.UpArrow) && alreadyPulled)
+        else if (Input.GetKeyDown(KeyCode.UpArrow) && resultOverviewVisible)
         {
-            SceneManager.LoadScene(
-                SceneManager.GetActiveScene().buildIndex
-            );
+            RestartGame();
         }
 
         if (Input.GetKeyDown(KeyCode.Q))
@@ -438,6 +413,44 @@ public class GameManagerScript : MonoBehaviour
             Application.Quit();
 #endif
         }
+    }
+
+    private IEnumerator FinishMixing()
+    {
+        Color mixedColor = wma.CaptureMixedColor();
+        WindmillsActive = false;
+        mixingPhaseActive = false;
+        foreach (Selectable ui in uiElementsToDisable)
+            if (ui != null) ui.interactable = false;
+        SetCanvasActive(textCanvas, false);
+        SetCanvasActive(textCanvasLandscape, false);
+        SetCanvasActive(InfoButtonNew, false);
+
+        yield return wma.RevealResult(mixedColor);
+
+        float similarity = ColorMatchUtility.CalculatePerceptualMatchPercent(mixedColor, _goalColour);
+        if (dataLogger != null)
+        {
+            dataLogger.currentUserName = string.IsNullOrEmpty(randomName) ? dataLogger.currentUserName : randomName;
+            dataLogger.currentUserScore = similarity;
+            dataLogger.WriteNewDataToCSV();
+        }
+        else Debug.LogWarning("GameManagerScript: No DataLogger assigned, score was not written.");
+
+        goalSphere.GetComponent<Renderer>().material.color = _goalColour;
+        achievedSphere.GetComponent<Renderer>().material.color = mixedColor;
+        UpdateFinishedGameFeedback(_goalColour, mixedColor, similarity);
+        SetCanvasActive(selectedColorCanvas, false);
+        SetCanvasActive(finishedGameCanvas, !ItIsHorizontal());
+        SetCanvasActive(finishedGameCanvasLandscape, ItIsHorizontal());
+        resultOverviewVisible = true;
+        finishRoutine = null;
+    }
+
+    public void RestartGame()
+    {
+        if (!resultOverviewVisible) return;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     public IEnumerator WaitTime()
@@ -486,11 +499,16 @@ public class GameManagerScript : MonoBehaviour
         float similarity)
     {
         string scoreText = similarity.ToString("0.##") + "%";
+        string feedback = similarity >= 95f ? "Zauberhaft getroffen!" :
+            similarity >= 75f ? "Schon ziemlich nah!" :
+            similarity >= 40f ? "Das wird schon bunt!" : "Eine ganz eigene Farbe!";
+        foreach (TMP_Text text in resultFeedbackTexts)
+            if (text != null) text.text = feedback;
 
         foreach (var text in percentageTexts)
         {
             if (text != null)
-                text.text = scoreText;
+                text.text = scoreText + " Übereinstimmung";
         }
 
         if (procentageText != null)
@@ -539,6 +557,8 @@ public class GameManagerScript : MonoBehaviour
             {
                 bar.fillAmount = clampedValue;
                 bar.color = barColor;
+                ResultBarMarker marker = bar.GetComponent<ResultBarMarker>();
+                if (marker != null) marker.SetValue(clampedValue);
             }
         }
     }
